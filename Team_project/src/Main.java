@@ -1,61 +1,115 @@
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        // 학생의 고유번호에 이름을 매핑
-        Map<Integer, String> nameMap = new HashMap<>();
-        // 학생의 고유번호에 선택한 과목 번호를 저장
-        Map<Integer, Set<Integer>> subjectMap = new HashMap<>();
-
-        // 필수 과목 목록
-        Map<Integer, String> requiredSub = new HashMap<>();
-        requiredSub.put(1, "Java");
-        requiredSub.put(2, "객체지향");
-        requiredSub.put(3, "Spring");
-        requiredSub.put(4, "JPA");
-        requiredSub.put(5, "MySQL");
-
+    public static void main(String[] args) throws Exception {
+        Map<String, String> nameMap = new HashMap<>();
+        Map<String, ArrayList<String>> subjectMap = new HashMap<>();
         Scanner sc = new Scanner(System.in);
-        System.out.println("고유번호를 입력해주세요. : ");
-        int idNumber = sc.nextInt();
 
-        System.out.println("성함을 입력해주세요. : ");
-        String name = sc.next();
-        nameMap.put(idNumber, name);
+        List<String> mandatorySubjects = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
+        List<String> optionalSubjects = Arrays.asList("디자인 패턴", "Spring Security", "Redis", "MongoDB");
 
-        Set<Integer> selectedSubjects = new HashSet<>();
-        while (selectedSubjects.size() < 3) { // 3개의 과목을 선택해야 함
-            System.out.println("과목 번호를 입력해주세요. (상세보기 0 입력) : ");
-            int subject = sc.nextInt();
+        do {
+            try {
+                System.out.println("수강생 정보 입력 (1), 점수 관리 (2) : ");
+                int select = sc.nextInt();
+                sc.nextLine(); // nextInt() 후의 개행 문자 소비
 
-            if (subject == 0) {
-                // 과목 목록 출력
-                System.out.println("필수 과목 목록:");
-                for (Map.Entry<Integer, String> entry : requiredSub.entrySet()) {
-                    System.out.println(entry.getKey() + ": " + entry.getValue());
+                // 사람 생성
+                if (select == 1) {
+                    System.out.print("고유번호를 입력해주세요(3자리로 입력해주세요.) : ");
+                    String idNumber = sc.nextLine();
+
+                    if (nameMap.containsKey(idNumber)) {
+                        throw new Exception("이미 등록된 사용자입니다.");
+                    }
+
+                    // 이름 입력
+                    System.out.print("성함을 입력해주세요 : ");
+                    String name = sc.nextLine();
+                    nameMap.put(idNumber, name);
+
+                    ArrayList<String> subjectList = new ArrayList<>();
+
+                    // 필수 과목 입력
+                    System.out.println("필수 과목 목록: " + String.join(", ", mandatorySubjects));
+                    while (subjectList.size() < 5) {
+                        System.out.print("필수 과목을 입력해주세요: ");
+                        String subject = sc.nextLine();
+
+                        if (!mandatorySubjects.contains(subject)) {
+                            System.out.println("유효하지 않은 필수 과목입니다. 다시 입력해주세요.");
+                            continue;
+                        }
+
+                        if (subjectList.contains(subject)) {
+                            System.out.println("이미 신청한 과목입니다.");
+                            continue;
+                        }
+
+                        subjectList.add(subject);
+
+                        if (subjectList.size() >= 3) {
+                            System.out.println("필수 과목 신청을 마치시겠습니까? (\"yes\" 입력 시 종료)");
+                            String answer = sc.nextLine();
+                            if (answer.equalsIgnoreCase("yes")) {
+                                break;
+                            }
+                        }
+                    }
+
+                    // 선택 과목 입력
+                    System.out.println("선택 과목 목록: " + String.join(", ", optionalSubjects));
+                    while (subjectList.size() < 9) {
+                        System.out.print("선택 과목을 입력해주세요: ");
+                        String subject = sc.nextLine();
+
+                        if (!optionalSubjects.contains(subject)) {
+                            System.out.println("유효하지 않은 선택 과목입니다. 다시 입력해주세요.");
+                            continue;
+                        }
+
+                        if (subjectList.contains(subject)) {
+                            System.out.println("이미 신청한 과목입니다.");
+                            continue;
+                        }
+
+                        subjectList.add(subject);
+
+                        if (subjectList.size() >= 6) {
+                            System.out.println("선택 과목 신청을 마치시겠습니까? (\"yes\" 입력 시 종료)");
+                            String answer = sc.nextLine();
+                            if (answer.equalsIgnoreCase("yes")) {
+                                break;
+                            }
+                        }
+                    }
+
+                    subjectMap.put(idNumber, subjectList);
+                    System.out.println("사람이 추가되었습니다.");
                 }
-            } else if (requiredSub.containsKey(subject)) {
-                // 중복된 과목 검사
-                if (selectedSubjects.contains(subject)) {
-                    System.out.println("중복된 과목입니다.");
-                } else {
-                    // 과목이 필수 과목 목록에 있는 경우 추가
-                    selectedSubjects.add(subject);
+                // 점수관리 시스템
+                else {
+                    System.out.println("해당 기능은 구현 중입니다!");
                 }
-            } else {
-                System.out.println("잘못된 과목 번호입니다. 다시 시도해주세요.");
+
+                // nameMap 프린트
+                System.out.println("현재 등록된 사람들:");
+                for (Map.Entry<String, String> entry : nameMap.entrySet()) {
+                    System.out.println("{" + entry.getKey() + ", " + entry.getValue() + "}");
+                }
+
+                // subjectMap 프린트
+                System.out.println("현재 등록된 과목들:");
+                for (Map.Entry<String, ArrayList<String>> entry : subjectMap.entrySet()) {
+                    System.out.println("{" + entry.getKey() + ", " + String.join(", ", entry.getValue()) + "}");
+                }
+
+                System.out.println("종료하시려면 'exit'을 입력하세요.");
+            } catch (Exception e) {
+                System.out.println("오류: " + e.getMessage());
+                System.out.println("종료하시려면 'exit'을 입력하세요.");
             }
-
-            System.out.println("현재 선택된 과목: " + selectedSubjects.size() + "개");
-        }
-        subjectMap.put(idNumber, selectedSubjects);
-
-        // 결과 출력
-        System.out.println("학생 정보:");
-        System.out.println("ID: " + idNumber + ", 이름: " + name);
-        System.out.println("선택한 과목들:");
-        for (Integer sub : subjectMap.get(idNumber)) {
-            System.out.println(" - " + requiredSub.get(sub));
-        }
+        } while (!sc.nextLine().equalsIgnoreCase("exit"));
     }
 }
