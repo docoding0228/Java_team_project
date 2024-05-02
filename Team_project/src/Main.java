@@ -44,6 +44,7 @@ public class Main {
                 System.out.print("{" + key + ", "); // 일,이,삼 출력
                 System.out.println(subjectMap.get(idNumber) + "}");
             }
+            System.out.println("hihi");
         }
 
     }
