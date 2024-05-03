@@ -14,7 +14,7 @@ public class Main {
 //                System.out.println("3. 수강생의 특정 과목 회차별 등급 조회");
 //                System.out.println("4. 메인 화면 이동");
 //                System.out.print(" 관리 항목을 선택하세요... ");
-                System.out.println("1. 수강생 정보 입력,  2. 회차 및 점수 등록 : ");
+                System.out.println("1. 수강생 정보 입력,  2. 회차 및 점수 등록 : ,  3. 수강생 정보 검색 : ");
                 int selectlist = sc.nextInt(); // 내부 메뉴 선택
 
                 if (selectlist == 1) { // 과목별 시험 회차 및 점수 등록
@@ -32,6 +32,33 @@ public class Main {
                     }
                 } else if (selectlist == 2) { // 회차 점수 수정
                     System.out.println("해당 기능은 구현 중입니다!");
+                } else if (selectlist == 3) { // 수강생 검색 기능
+                    while(true) {
+                        // 비어있으면 등록된 것 없으니 ㄷ빠져나가고
+                        if(studentMap.isEmpty()){
+                            System.out.println("등록된 사용자가 없습니다");
+                            break;
+                        }
+
+                        System.out.println("수강생 ID 를 입력하세요 (type \"exit\" to quit): ");
+                        String studentId = sc.next();
+
+                        if(studentId.equals("exit")) {
+                            break;
+                        } else if (studentMap.containsKey(studentId)) {
+                            for (Map.Entry<String, Student> entry : studentMap.entrySet()) {
+                                if (studentId.equals(entry.getKey())){
+                                    System.out.println("[ 검색된 학생 결과입니다 ]");
+                                    System.out.println("ID: " + studentId);
+                                    entry.getValue().searchStudent();
+                                }
+                            }
+                            break;
+                        } else {
+                            System.out.println("존재하지 않는 ID 입니다. 올바른 ID를 입력해주세요");
+                            continue;
+                        }
+                    }
                 }
 //                else if (selectlist == 3) { // 특정 과목 회차별 등급 조회
 //                    System.out.println("해당 기능은 구현 중입니다!");
@@ -43,10 +70,10 @@ public class Main {
                 }
 
                 // nameMap 프린트
-                System.out.println("현재 등록된 사람들:");
-                for (Map.Entry<String, Student> entry : studentMap.entrySet()) {
-                    System.out.println("{" + entry.getKey() + ", " + entry.getValue() + "}");
-                }
+//                System.out.println("현재 등록된 사람들:");
+//                for (Map.Entry<String, Student> entry : studentMap.entrySet()) {
+//                    System.out.println("{" + entry.getKey() + ", " + entry.getValue() + "}");
+//                }
 
 
 

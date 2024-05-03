@@ -39,8 +39,10 @@ public class Score {
         }else {
             switch(scoreRank/10){
                 case 100:
-                case 9:
                     this.rank = 'A';
+                    break;
+                case 9:
+                    this.rank = 'B';
                     break;
                 case 8:
                     this.rank = 'C';

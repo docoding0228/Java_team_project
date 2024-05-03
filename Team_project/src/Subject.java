@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Subject {
+    // enum 추천 (따로 클래스처럼 만드는것) >> 이걸 쓰면 나중에 목록 추가하고 관리하는것들이 쉬워지지만 이 사이즈의 프로젝트에서 사용하기에는 굳이라고 판단
     List<String> mandatorySubjects = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
     List<String> optionalSubjects = Arrays.asList("디자인 패턴", "Spring Security", "Redis", "MongoDB");
     Scanner sc = new Scanner(System.in);
