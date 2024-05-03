@@ -105,10 +105,10 @@ public class Main {
 
                             subjectList.add(subject);
 
-                            if(subjectList.size() == 9) {
+                            if(subjectIndex == 3) {
                                 System.out.println("선택 과목 신청이 완료되었습니다!");
                                 break;
-                            }else if (subjectList.size() >= 7) {
+                            }else if (subjectIndex >= 1) {
                                 System.out.println("선택 과목 신청을 마치시겠습니까? (\"yes\" 입력 시 종료)");
                                 String answer = sc.nextLine();
                                 if (answer.equalsIgnoreCase("yes")) {
