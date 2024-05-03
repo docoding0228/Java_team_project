@@ -1,18 +1,16 @@
 package mypk;
-
 import java.util.Scanner;
 
 public class Main {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws InterruptedException {
-        displayMainView(); // 메인 루프 시작
+        displayMainView(); // 메인 루프 실행
     }
 
     private static void displayMainView() throws InterruptedException {
-        boolean flag = true;
-        while (flag) {
-
+        boolean running = true;
+        while (running) {
             System.out.println("\n==================================");
             System.out.println("내일배움캠프 수강생 관리 프로그램 실행 중...");
             System.out.println("1. 수강생 관리");
@@ -20,12 +18,12 @@ public class Main {
             System.out.println("3. 프로그램 종료");
             System.out.print("관리 항목을 선택하세요... ");
 
-            int input = sc.nextInt();
+            int choice = sc.nextInt();
 
-            switch (input) {
+            switch (choice) {
                 case 1 -> displayStudentView(); // 수강생 관리
                 case 2 -> displayScoreView(); // 점수 관리
-                case 3 -> flag = false; // 프로그램 종료
+                case 3 -> running = false; // 프로그램 종료
                 default -> {
                     System.out.println("잘못된 입력입니다. 2초 후 되돌아갑니다.");
                     Thread.sleep(2000);
@@ -36,8 +34,8 @@ public class Main {
     }
 
     private static void displayStudentView() {
-        boolean flag = true;
-        while (flag) {
+        boolean running = true;
+        while (running) {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
             System.out.println("1. 수강생 등록");
@@ -45,21 +43,18 @@ public class Main {
             System.out.println("3. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요... ");
 
-            int input = sc.nextInt();
+            int choice = sc.nextInt();
 
-            switch (input) {
-                case 1 -> {
-                    System.out.println("수강생 등록 기능 호출");
-                    // 수강생 등록 기능 호출
-                }
+            switch (choice) {
+                case 1 -> Student.registerStudent(); // 수강생 등록
                 case 2 -> {
-                    System.out.println("수강생 목록 조회 기능 호출");
-                    // 수강생 목록 조회 기능 호출
+                    // 수강생 목록 조회 기능
+                    System.out.println("수강생 목록 조회");
                 }
-                case 3 -> flag = false; // 메인 화면으로 돌아가기
+                case 3 -> running = false; // 메인 화면으로 돌아가기
                 default -> {
                     System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
-                    flag = false;
+                    running = false;
                 }
             }
         }
