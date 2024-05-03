@@ -106,7 +106,7 @@ public class Main {
                             subjectList.add(subject);
 
                             if(subjectList.size() == 9) {
-                                System.out.println("선택 과목 신청이 완료되었습니다.");
+                                System.out.println("선택 과목 신청이 완료되었습니다!");
                                 break;
                             }else if (subjectList.size() >= 7) {
                                 System.out.println("선택 과목 신청을 마치시겠습니까? (\"yes\" 입력 시 종료)");
