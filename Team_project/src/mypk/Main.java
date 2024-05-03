@@ -49,6 +49,7 @@ public class Main {
                 case 1 -> Student.registerStudent(); // 수강생 등록
                 case 2 -> {
                     // 수강생 목록 조회 기능
+                    Student.listStudents();
                     System.out.println("수강생 목록 조회");
                 }
                 case 3 -> running = false; // 메인 화면으로 돌아가기
