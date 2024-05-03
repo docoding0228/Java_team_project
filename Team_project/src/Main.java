@@ -7,8 +7,10 @@ public class Main {
         Map<String, ArrayList<String>> subjectMap = new HashMap<>();
         Scanner sc = new Scanner(System.in);
 
-        List<String> mandatorySubjects = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
-        List<String> optionalSubjects = Arrays.asList("디자인 패턴", "Spring Security", "Redis", "MongoDB");
+        List<String> RequiredSub = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
+        // 필수 과목 List
+        List<String> OptionalSub = Arrays.asList("디자인 패턴", "Spring Security", "Redis", "MongoDB");
+        // 선택 과목 List
 
         do {
             try {
@@ -19,7 +21,10 @@ public class Main {
                 System.out.println("3. 수강생의 특정 과목 회차별 등급 조회");
                 System.out.println("4. 메인 화면 이동");
                 System.out.print(" 관리 항목을 선택하세요... ");
+
                 int selectlist = sc.nextInt();
+                // mainlist 초기 화면 print문
+
                 sc.nextLine(); // 개행 문자 소비
 
                 if (selectlist == 1) { // 과목별 시험 회차 및 점수 등록
@@ -43,8 +48,8 @@ public class Main {
                         // 과목 등록
                         ArrayList<String> subjectList = new ArrayList<>();
                         System.out.println("필수 과목 목록:");
-                        for (int i = 0; i < mandatorySubjects.size(); i++) {
-                            System.out.println((i + 1) + ". " + mandatorySubjects.get(i));
+                        for (int i = 0; i < RequiredSub.size(); i++) {
+                            System.out.println((i + 1) + ". " + RequiredSub.get(i));
                         }
 
                         while (subjectList.size() < 5) {
@@ -52,12 +57,12 @@ public class Main {
                             int subjectIndex = sc.nextInt() - 1; // 인덱스는 0부터 시작
                             sc.nextLine(); // 개행 문자 소비
 
-                            if (subjectIndex < 0 || subjectIndex >= mandatorySubjects.size()) {
+                            if (subjectIndex < 0 || subjectIndex >= RequiredSub.size()) {
                                 System.out.println("유효하지 않은 필수 과목 번호입니다. 다시 입력해주세요.");
                                 continue;
                             }
 
-                            String subject = mandatorySubjects.get(subjectIndex);
+                            String subject = RequiredSub.get(subjectIndex);
 
                             if (subjectList.contains(subject)) {
                                 System.out.println("이미 신청한 과목입니다.");
@@ -77,8 +82,8 @@ public class Main {
 
                         // 선택 과목 입력
                         System.out.println("선택 과목 목록:");
-                        for (int i = 0; i < optionalSubjects.size(); i++) {
-                            System.out.println((i + 1) + ". " + optionalSubjects.get(i));
+                        for (int i = 0; i < OptionalSub.size(); i++) {
+                            System.out.println((i + 1) + ". " + OptionalSub.get(i));
                         }
 
                         while (subjectList.size() < 9) {
@@ -86,12 +91,12 @@ public class Main {
                             int subjectIndex = sc.nextInt() - 1;
                             sc.nextLine(); // 개행 문자 소비
 
-                            if (subjectIndex < 0 || subjectIndex >= optionalSubjects.size()) {
+                            if (subjectIndex < 0 || subjectIndex >= OptionalSub.size()) {
                                 System.out.println("유효하지 않은 선택 과목 번호입니다. 다시 입력해주세요.");
                                 continue;
                             }
 
-                            String subject = optionalSubjects.get(subjectIndex);
+                            String subject = OptionalSub.get(subjectIndex);
 
                             if (subjectList.contains(subject)) {
                                 System.out.println("이미 신청한 과목입니다.");
