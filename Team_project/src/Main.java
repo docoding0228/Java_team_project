@@ -1,5 +1,39 @@
 import java.util.*;
 
+enum RequiredSub {
+    JAVA("Java"),
+    OBJECT_ORIENTED("객체지향"),
+    SPRING("Spring"),
+    JPA("JPA"),
+    MYSQL("MySQL");
+
+    private final String displayName;
+
+    RequiredSub(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+}
+
+enum OptionalSub {
+    DESIGN_PATTERNS("디자인 패턴"),
+    SPRING_SECURITY("Spring Security"),
+    REDIS("Redis"),
+    MONGODB("MongoDB");
+
+    private final String displayName;
+
+    OptionalSub(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+}
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -7,24 +41,17 @@ public class Main {
         Map<String, ArrayList<String>> subjectMap = new HashMap<>();
         Scanner sc = new Scanner(System.in);
 
-        List<String> RequiredSub = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
-        // 필수 과목 List
-        List<String> OptionalSub = Arrays.asList("디자인 패턴", "Spring Security", "Redis", "MongoDB");
-        // 선택 과목 List
-
         do {
             try {
-                System.out.println("==================================");
-                System.out.println("점수 관리 실행 중...");
-                System.out.println("1. 수강생의 과목별 시험 회차 및 점수 등록");
-                System.out.println("2. 수강생의 과목별 회차 점수 수정");
+                System.out.println("\n==================================");
+                System.out.println(" 내일배움캠프 수강생 관리 프로그램 실행 중... ");
+                System.out.println("1. 수강생 관리");
+                System.out.println("2. 점수 관리");
                 System.out.println("3. 수강생의 특정 과목 회차별 등급 조회");
-                System.out.println("4. 메인 화면 이동");
-                System.out.print(" 관리 항목을 선택하세요... ");
+                System.out.println("4. 프로그램 종료");
+                System.out.print("관리 항목을 선택하세요...");
 
-                int selectlist = sc.nextInt();
-                // mainlist 초기 화면 print문
-
+                int selectlist = sc.nextInt(); // 선택을 위한 입력
                 sc.nextLine(); // 개행 문자 소비
 
                 if (selectlist == 1) { // 과목별 시험 회차 및 점수 등록
@@ -48,8 +75,8 @@ public class Main {
                         // 과목 등록
                         ArrayList<String> subjectList = new ArrayList<>();
                         System.out.println("필수 과목 목록:");
-                        for (int i = 0; i < RequiredSub.size(); i++) {
-                            System.out.println((i + 1) + ". " + RequiredSub.get(i));
+                        for (RequiredSub subject : RequiredSub.values()) {
+                            System.out.println(subject.ordinal() + 1 + ". " + subject.getDisplayName());
                         }
 
                         while (subjectList.size() < 5) {
@@ -57,12 +84,12 @@ public class Main {
                             int subjectIndex = sc.nextInt() - 1; // 인덱스는 0부터 시작
                             sc.nextLine(); // 개행 문자 소비
 
-                            if (subjectIndex < 0 || subjectIndex >= RequiredSub.size()) {
+                            if (subjectIndex < 0 || subjectIndex >= RequiredSub.values().length) {
                                 System.out.println("유효하지 않은 필수 과목 번호입니다. 다시 입력해주세요.");
                                 continue;
                             }
 
-                            String subject = RequiredSub.get(subjectIndex);
+                            String subject = RequiredSub.values()[subjectIndex].getDisplayName();
 
                             if (subjectList.contains(subject)) {
                                 System.out.println("이미 신청한 과목입니다.");
@@ -82,21 +109,21 @@ public class Main {
 
                         // 선택 과목 입력
                         System.out.println("선택 과목 목록:");
-                        for (int i = 0; i < OptionalSub.size(); i++) {
-                            System.out.println((i + 1) + ". " + OptionalSub.get(i));
+                        for (OptionalSub subject : OptionalSub.values()) {
+                            System.out.println(subject.ordinal() + 1 + ". " + subject.getDisplayName());
                         }
 
                         while (subjectList.size() < 9) {
                             System.out.print("선택 과목 번호를 입력해주세요: ");
-                            int subjectIndex = sc.nextInt() - 1;
+                            int subjectIndex = sc.nextInt() - 1; // 인덱스는 0부터 시작
                             sc.nextLine(); // 개행 문자 소비
 
-                            if (subjectIndex < 0 || subjectIndex >= OptionalSub.size()) {
+                            if (subjectIndex < 0 || subjectIndex >= OptionalSub.values().length) {
                                 System.out.println("유효하지 않은 선택 과목 번호입니다. 다시 입력해주세요.");
                                 continue;
                             }
 
-                            String subject = OptionalSub.get(subjectIndex);
+                            String subject = OptionalSub.values()[subjectIndex].getDisplayName();
 
                             if (subjectList.contains(subject)) {
                                 System.out.println("이미 신청한 과목입니다.");
@@ -125,8 +152,8 @@ public class Main {
                     System.out.println("해당 기능은 구현 중입니다!");
                 } else if (selectlist == 3) { // 특정 과목 회차별 등급 조회
                     System.out.println("해당 기능은 구현 중입니다!");
-                } else if (selectlist == 4) { // 메인 화면 이동
-                    System.out.println("메인 화면으로 돌아갑니다.");
+                } else if (selectlist == 4) { // 프로그램 종료
+                    System.out.println("프로그램을 종료합니다.");
                 } else {
                     System.out.println("유효하지 않은 선택입니다.");
                 }
@@ -151,4 +178,3 @@ public class Main {
         } while (!sc.nextLine().equalsIgnoreCase("exit"));
     }
 }
-
