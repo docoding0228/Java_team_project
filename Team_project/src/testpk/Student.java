@@ -1,9 +1,11 @@
+package testpk;
+
 import java.util.*;
 
 public class Student {
     Scanner sc = new Scanner(System.in);
     private String name;
-    private List<String> subjectList;  // 학생이 선택한 과목 목록
+    private List<String> subjectList;  // 수강 목록
 
     public Student() {}
 
@@ -17,14 +19,13 @@ public class Student {
     // 학생 과목 설정
     public void setStudentSubject() {
         Subject subject = new Subject();
-        subject.setSubjectList();  // 과목 선택
+        subject.setSubjectList();  // 과목 설정
         this.subjectList = subject.getSubjects();  // 선택된 과목 목록 저장
-
     }
 
-    // 선택된 과목 목록을 반환
+    // 수강 목록을 반환
     public List<String> getSubjectList() {
-        return this.subjectList;  // 선택된 과목 목록을 반환
+        return this.subjectList;
     }
 
     // 학생 정보 출력

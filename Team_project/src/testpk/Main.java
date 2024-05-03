@@ -1,3 +1,5 @@
+package testpk;
+
 import java.util.*;
 
 public class Main {
@@ -7,7 +9,7 @@ public class Main {
 
         while (true) {
             try {
-                System.out.println("1. 수강생 정보 입력, 2. 회차 및 점수 등록, 3. 수강생 정보 검색: ");
+                System.out.println("1. 수강생 정보 입력, 2. 회차 및 점수 등록, 3. 수강생 정보 검색:");
                 int selectList = sc.nextInt();  // 메뉴 선택
 
                 if (selectList == 1) {  // 수강생 정보 입력
@@ -21,14 +23,16 @@ public class Main {
                         student.setStudentName();  // 이름 설정
                         student.setStudentSubject();  // 과목 설정
 
-                        studentMap.put(studentId, student);  // 학생 맵에 추가
+                        studentMap.put(studentId, student);  // 학생 추가
 
-                        // 선택 완료 후 출력
+                        // 선택이 완료된 후, 수강생 정보 출력
+                        List<String> subjectList = student.getSubjectList();
                         System.out.println("수강생 고유번호: " + studentId);
-                        System.out.println("선택된 과목 목록: " + student.getSubjectList());  // 선택된 과목 목록 출력
+                        System.out.println("선택된 과목 목록: " + subjectList);
                     }
                 }
                 else if (selectList == 2) {  // 회차 및 점수 등록
+
                     System.out.print("수강생 ID 를 입력하세요: ");
                     String studentId = sc.next();
 
@@ -37,11 +41,30 @@ public class Main {
                         continue;
                     }
 
-                    System.out.print("과목을 입력하세요: ");
-                    String subject = sc.next();
+                    Student student = studentMap.get(studentId);
+                    List<String> subjects = student.getSubjectList();  // 수강 목록 가져오기
 
-                    Score scoreObj = new Score();  // Score 객체 생성
-                    scoreObj.setNumberGrade(subject);  // 회차 및 점수 설정
+                    // 수강 목록을 보여주고 각 과목에 대해 점수 입력 및 등급 계산
+                    System.out.println("수강생 " + studentId + "의 수강 목록: " + subjects);
+
+                    for (String subject : subjects) {
+                        System.out.print("과목 " + subject + "의 점수를 입력하세요: ");
+                        int scoreValue = sc.nextInt();
+
+                        while (scoreValue < 0 || scoreValue > 100) {
+                            System.out.println("유효하지 않은 점수입니다. 0~100 사이의 값을 입력하세요.");
+                            scoreValue = sc.nextInt();
+                        }
+
+                        // 등급 결정
+                        Score scoreObj = new Score();  // testpk.Score 객체 생성
+                        scoreObj.setNumberGrade(subject);  // 회차 및 점수 설정
+                        boolean isMandatory = scoreObj.isMandatorySubject(subject);
+                        String grade = scoreObj.getLetterGrade(scoreValue, isMandatory);
+
+                        // 점수 및 등급 출력
+                        System.out.println("과목 " + subject + ", 점수: " + scoreValue + ", 등급: " + grade);
+                    }
                 }
                 else if (selectList == 3) {  // 수강생 정보 검색
                     System.out.print("수강생 ID 를 입력하세요: ");
