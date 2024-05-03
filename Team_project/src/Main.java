@@ -3,6 +3,9 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        Score score = new Score();
+        score.setNumberGrade("Math");
+
         Scanner sc = new Scanner(System.in);
         Map<String, Student> studentMap = new HashMap<>();
         do {
