@@ -40,19 +40,17 @@ public class Main {
             System.out.println("수강생 관리 실행 중...");
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 목록 조회");
-            System.out.println("3. 메인 화면 이동");
+            System.out.println("3. 수강생 과목 등록");
+            System.out.println("4. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요... ");
 
             int choice = sc.nextInt();
 
             switch (choice) {
                 case 1 -> Student.registerStudent(); // 수강생 등록
-                case 2 -> {
-                    // 수강생 목록 조회 기능
-                    Student.listStudents();
-                    System.out.println("수강생 목록 조회");
-                }
-                case 3 -> running = false; // 메인 화면으로 돌아가기
+                case 2 -> Student.listStudents();  // 수강생 목록 조회
+                case 3 -> Subject.manageSubjects(); // 수강생 과목 추가
+                case 4 -> running = false; // 메인 화면으로 돌아가기
                 default -> {
                     System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
                     running = false;

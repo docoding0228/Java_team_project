@@ -37,5 +37,10 @@ public class Student {
             System.out.println("등록된 수강생 목록:");
             studentMap.forEach((id, name) -> System.out.println("ID: " + id + ", 이름: " + name));
         }
+
+    }
+
+    public static boolean isRegistered(String studentId) {
+        return studentMap.containsKey(studentId); // 등록 여부 확인
     }
 }
