@@ -1,16 +1,18 @@
 package mypk;
 
+import mypk.Student;
+
 import java.util.*;
 
 public class Subject {
     // 프로그램 실행 중에 값이 변경되지 않는 상수 리스트로, 필수 과목 목록을 미리 정의
-    private static final List<String> REQUIRED_SUBJECTS = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
-    private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("디자인 패턴", "Spring Security", "Redis", "MongoDB");
+    private static final List<String> REQUIRED_SUBJECTS = Arrays.asList("1.Java", "2.객체지향", "3.Spring", "4.JPA", "5.MySQL");
+    private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("1.디자인_패턴", "2.Spring _ecurity", "3.Redis", "4.MongoDB");
 
     private static Map<String, List<String>> studentSubjects = new HashMap<>(); // 학생별 과목 목록
 
     // 수강생 과목 추가
-    public static void manageSubjects() {
+    public static void manageSubjects() throws InterruptedException {
         Scanner sc = new Scanner(System.in);
 
         System.out.print("수강생 ID를 입력하세요: ");
@@ -41,28 +43,32 @@ public class Subject {
         System.out.println("필수 과목 목록: " + REQUIRED_SUBJECTS);
         System.out.println("필수 과목을 최소 3개 이상 선택하세요.");
         boolean addingRequiredSubjects = true;
+        int subjectSize = 0;
 
         // addingRequiredSubjects 변수가 true인 동안 계속 실행되는 while 루프를 시작
         // addingRequiredSubjects 변수가 false가 되면 루프가 종료
+
         while (addingRequiredSubjects) {
-            System.out.print("필수 과목을 입력하세요: ");
-
-            //  필수 과목 입력 부분
-            String requiredSubject = sc.next();
-
-            // 내가 입력한 필수 과목이, 초기에 선언한 REQUIRED_SUBJECTS(필수과목) 목록에 있는지 확인
-            // 그리고 subjectlist에는 포함되어 있지 않을 때 필수 과목을 subjectlist 추가
-            // 수강생이 필수 과목을 추가할 때, 필수 과목 목록에 포함된 과목이면서 중복되지 않은 과목만 추가하도록 하는 데 사용
-            if (REQUIRED_SUBJECTS.contains(requiredSubject) && !subjectlist.contains(requiredSubject)) {
-                subjectlist.add(requiredSubject);
-                // contains는 컬렉션(리스트, 맵 등) 또는 문자열에서 특정 요소 또는 문자열이 포함되어 있는지 확인하는 메서드
-                // REQUIRED_SUBJECTS.contains(requiredSubject): 초기필수과목에서 내가 입력한 필수과목이 존재하는지 확인
-            } else {
-                System.out.println("올바르거나 중복되지 않은 과목을 입력하세요.");
+            System.out.print("희망하는하는 필수 과목의 번호를 입력하세요: ");
+            int requiredSubjectsIndex = sc.nextInt();
+            // 입력한 번호가 1이상이고 리스트 크기 이하인지 확인
+            if (requiredSubjectsIndex >= 1 && requiredSubjectsIndex <= REQUIRED_SUBJECTS.size()) {
+                //번호에 따른 과목을 가져옴
+                String requiredSubject = REQUIRED_SUBJECTS.get(requiredSubjectsIndex - 1);
+                //가져온 과목이 이미 선택한 과목인지 확인 아니라면 목록에 추가
+                if (!subjectlist.contains(requiredSubject)) {
+                    subjectlist.add(requiredSubject);
+                    subjectSize ++;
+                } else {
+                    System.out.println("이미 선택한 과목입니다.");
+                }
+            }// 번호가 맞는 번호인지 확인 아니라면 목록에 추가
+            else {
+                System.out.println("올바른 번호를 입력하세요.");
             }
 
             // subjectlist 크기가 3 이상인지를 확인하는 조건문
-            if (subjectlist.size() >= 3) { // 필수과목을 3개 이상 입력했을 때
+            if (subjectlist.size() >= 3) {
                 System.out.print("필수 과목을 더 추가하시나요? (YES/NO): ");
                 String answer = sc.next();
 
@@ -74,26 +80,32 @@ public class Subject {
             }
         }
 
+
         // 선택과목 추가
         System.out.println("선택 과목 목록: " + ELECTIVE_SUBJECTS);
         boolean addingElectiveSubjects = true;
 
         while (addingElectiveSubjects) {
-            System.out.print("선택 과목을 입력하세요: ");
-            String electiveSubject = sc.next();
+            System.out.print("희망하는 선택 과목의 번호를 입력하세요: ");
+            int electiveSubjectsIndex = sc.nextInt();
 
-            if (ELECTIVE_SUBJECTS.contains(electiveSubject) && !subjectlist.contains(electiveSubject)) {
-                subjectlist.add(electiveSubject);
+            if (electiveSubjectsIndex  >= 1 && electiveSubjectsIndex  <= ELECTIVE_SUBJECTS.size()) {
+                String electiveSubject = ELECTIVE_SUBJECTS.get(electiveSubjectsIndex  - 1);
+                if (!subjectlist.contains(electiveSubject)) {
+                    subjectlist.add(electiveSubject);
+                } else {
+                    System.out.println("이미 선택한 과목입니다.");
+                }
             } else {
-                System.out.println("올바르거나 중복되지 않은 과목을 입력하세요.");
+                System.out.println("올바른 번호를 입력하세요.");
             }
 
-            if (subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).count() >= 2) { // 선택과목 2개 이상 입력했을 때
+            if (subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).count() >= 2) {
                 System.out.print("선택 과목을 더 추가하시나요? (YES/NO): ");
                 String answer = sc.next();
-
-                if ("NO".equalsIgnoreCase(answer)) {
-                    addingElectiveSubjects = false; // 입력 종료
+                if ("NO".equalsIgnoreCase(answer) || subjectlist.size() >= subjectSize + 4 ) {
+                    Score.displayScoreView(); //일단 이거를 내일
+                    addingElectiveSubjects = false;
                 }
             }
         }
@@ -102,5 +114,6 @@ public class Subject {
         System.out.println("수강생 ID: " + studentId);
         System.out.println("필수 과목: " + subjectlist.stream().filter(REQUIRED_SUBJECTS::contains).toList());
         System.out.println("선택 과목: " + subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).toList());
+
     }
 }
