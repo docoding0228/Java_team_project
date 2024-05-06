@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         displayMainView(); // 메인 루프 실행
     }
-
+    //
     public static void displayMainView() throws InterruptedException {
         boolean running = true;
         while (running) {
