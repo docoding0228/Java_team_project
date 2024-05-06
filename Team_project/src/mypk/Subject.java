@@ -21,7 +21,7 @@ public class Subject {
         // 학생 등록 여부 확인
         // studentId가 Student.isRegistered() 메서드에서 false를 반환하는지 확인
         // 수강생 ID가 등록되지 않았음을 의미
-        if (!Student.isRegistered(studentId)) {
+        if (!StudentManagement.isRegistered(studentId)) {
             System.out.println("등록되지 않은 ID 입니다.");
             return;
         }
