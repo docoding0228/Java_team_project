@@ -6,12 +6,12 @@ import java.util.Scanner;
 
 public class Student {
     private static Scanner sc = new Scanner(System.in);
+
     // 수강생 ID와 이름을 저장하는 Map
-    private static Map<String, String> studentMap = new HashMap<>();
+    public static Map<String, String> studentMap = new HashMap<>();
 
     public static void registerStudent() {
-        System.out.print("수강생 ID를 입력하세요: ");
-        String studentId = sc.next(); // 수강생 ID 입력
+        String studentId = pushID();
 
         // 중복된 ID가 있는지 확인
         if (studentMap.containsKey(studentId)) {
@@ -47,7 +47,8 @@ public class Student {
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 목록 조회");
             System.out.println("3. 수강생 과목 등록");
-            System.out.println("4. 메인 화면 이동");
+            System.out.println("4. 수강생 과목 조회, 수정");
+            System.out.println("5. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요... ");
 
             int choice = sc.nextInt();
@@ -68,9 +69,10 @@ public class Student {
     public static boolean isRegistered(String studentId) {
         return studentMap.containsKey(studentId); // 등록 여부 확인
     }
+
+    public static String pushID() {
+        System.out.print("수강생 ID를 입력하세요: ");
+        String studentId = sc.next();
+        return studentId;
+    }
 }
-//public static String pushID() {
-//    System.out.print("수강생 ID를 입력하세요: ");
-//    String studentId = sc.next();
-//    return studentId;
-//}

@@ -11,13 +11,11 @@ public class Subject {
 
     private static Map<String, List<String>> studentSubjects = new HashMap<>(); // 학생별 과목 목록
 
+    private static Scanner sc = new Scanner(System.in);
+
     // 수강생 과목 추가
     public static void manageSubjects() throws InterruptedException {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("수강생 ID를 입력하세요: ");
-        String studentId = sc.next();
-
+        String studentId = Student.pushID();
         // 학생 등록 여부 확인
         // studentId가 Student.isRegistered() 메서드에서 false를 반환하는지 확인
         // 수강생 ID가 등록되지 않았음을 의미
@@ -38,6 +36,7 @@ public class Subject {
         // studentSubjects 맵에서 studentId에 해당하는 값을 가져와 subjects 리스트에 할당
         // 수강생 ID에 대해 어떤 과목이 등록되어 있는지 확인하거나 추가 작업을 수행할 때 사용
         List<String> subjectlist = studentSubjects.get(studentId);
+        //studentSubjects.get(studentId) << 빈어레이 리스트  List<String> subjectlist = studentSubjects.get(studentId);
 
         // 필수과목 추가
         System.out.println("필수 과목 목록: " + REQUIRED_SUBJECTS);
@@ -114,6 +113,10 @@ public class Subject {
         System.out.println("수강생 ID: " + studentId);
         System.out.println("필수 과목: " + subjectlist.stream().filter(REQUIRED_SUBJECTS::contains).toList());
         System.out.println("선택 과목: " + subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).toList());
+
+    }
+
+    public void correction() {
 
     }
 }
