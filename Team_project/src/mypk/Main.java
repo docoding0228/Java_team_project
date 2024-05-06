@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         displayMainView(); // 메인 루프 실행
     }
-    //
+
     public static void displayMainView() throws InterruptedException {
         boolean running = true;
         while (running) {
@@ -20,7 +20,7 @@ public class Main {
             int choice = sc.nextInt();
 
             switch (choice) {
-                case 1 -> StudentManagement.displayStudentView(); // 수강생 관리
+                case 1 -> Student.displayStudentView(); // 수강생 관리
                 case 2 -> running = false; // 점수 관리
                 default -> {
                     System.out.println("잘못된 입력입니다. 2초 후 되돌아갑니다.");
