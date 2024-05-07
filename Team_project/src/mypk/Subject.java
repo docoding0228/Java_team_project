@@ -42,7 +42,7 @@ public class Subject {
 
         // 필수과목 추가
         System.out.print("필수 과목 목록: ");
-        for (int i = 0; i < ELECTIVE_SUBJECTS.size(); i++) {
+        for (int i = 0; i < REQUIRED_SUBJECTS.size()-1; i++) {
             System.out.print("[" + (i + 1) + ". " + REQUIRED_SUBJECTS.get(i) + "], ");
         }
         System.out.println("[" + (5) + ". " + REQUIRED_SUBJECTS.get(4) + "]");
