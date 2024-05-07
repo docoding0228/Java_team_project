@@ -3,11 +3,13 @@ package mypk;
 import mypk.Student;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Subject {
     // 프로그램 실행 중에 값이 변경되지 않는 상수 리스트로, 필수 과목 목록을 미리 정의
-    private static final List<String> REQUIRED_SUBJECTS = Arrays.asList("1.Java", "2.객체지향", "3.Spring", "4.JPA", "5.MySQL");
-    private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("1.디자인_패턴", "2.Spring _ecurity", "3.Redis", "4.MongoDB");
+    private static final List<String> REQUIRED_SUBJECTS = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
+    private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("디자인_패턴", "Spring_Security", "Redis", "MongoDB");
 
     private static Map<String, List<String>> studentSubjects = new HashMap<>(); // 학생별 과목 목록
 
@@ -35,11 +37,17 @@ public class Subject {
 
         // studentSubjects 맵에서 studentId에 해당하는 값을 가져와 subjects 리스트에 할당
         // 수강생 ID에 대해 어떤 과목이 등록되어 있는지 확인하거나 추가 작업을 수행할 때 사용
-        List<String> subjectlist = studentSubjects.get(studentId);
+        List<String> subjectlist = studentSubjects.get(studentId); //Java << 1, 100 A, 2, 90  B
         //studentSubjects.get(studentId) << 빈어레이 리스트  List<String> subjectlist = studentSubjects.get(studentId);
 
         // 필수과목 추가
-        System.out.println("필수 과목 목록: " + REQUIRED_SUBJECTS);
+        System.out.print("필수 과목 목록: ");
+        for(int i=0; i<ELECTIVE_SUBJECTS.size(); i++){
+            System.out.print("[" +(i+1) + ". " + REQUIRED_SUBJECTS.get(i) + "], ");
+        }
+        System.out.println("[" +(5) + ". " + REQUIRED_SUBJECTS.get(4) + "]");
+
+//        System.out.println("필수 과목 목록: " + REQUIRED_SUBJECTS);
         System.out.println("필수 과목을 최소 3개 이상 선택하세요.");
         boolean addingRequiredSubjects = true;
         int subjectSize = 0;
@@ -56,6 +64,8 @@ public class Subject {
                 String requiredSubject = REQUIRED_SUBJECTS.get(requiredSubjectsIndex - 1);
                 //가져온 과목이 이미 선택한 과목인지 확인 아니라면 목록에 추가
                 if (!subjectlist.contains(requiredSubject)) {
+//                    Pattern pattern = Pattern.compile("[0-9]+\\.+(.+)");
+//                    Matcher matcher = pattern.matcher(requiredSubject);
                     subjectlist.add(requiredSubject);
                     subjectSize ++;
                 } else {
@@ -81,7 +91,11 @@ public class Subject {
 
 
         // 선택과목 추가
-        System.out.println("선택 과목 목록: " + ELECTIVE_SUBJECTS);
+        System.out.print("필수 과목 목록: ");
+        for(int i=0; i<ELECTIVE_SUBJECTS.size() - 1; i++){
+            System.out.print("[" +(i+1) + ". " + ELECTIVE_SUBJECTS.get(i) + "], ");
+        }
+        System.out.println("[4. " + ELECTIVE_SUBJECTS.get(3) + "]");
         boolean addingElectiveSubjects = true;
 
         while (addingElectiveSubjects) {
@@ -113,9 +127,8 @@ public class Subject {
         System.out.println("수강생 ID: " + studentId);
         System.out.println("필수 과목: " + subjectlist.stream().filter(REQUIRED_SUBJECTS::contains).toList());
         System.out.println("선택 과목: " + subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).toList());
-
     }
-
+//.stream().filter(ELECTIVE_SUBJECTS::contains).toList()
     public void correction() {
 
     }
