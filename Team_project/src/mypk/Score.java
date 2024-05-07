@@ -5,50 +5,62 @@ import java.util.*;
 public class Score {
     private static final Scanner sc = new Scanner(System.in);
 
-    // 학생의 수강 과목을 키로 하고, 회차별 점수와 등급을 값으로 가지는 맵
     private static final Map<String, Map<Integer, ScoreEntry>> scoreMap = new HashMap<>();
+    // String : 학생 ID와 과목
+    // Integer : 회차
+    // ScoreEntry : 점수와 등급
 
-    // 학생-과목 구조의 클래스 정의
+    // 점수와 등급을 나타내는 클래스
     public static class ScoreEntry {
         private final int score;
         private final String grade;
 
+        // 점수와 등급을 초기화
         public ScoreEntry(int score, String grade) {
             this.score = score;
             this.grade = grade;
         }
 
-        public int getScore() {
-            return score;
-        }
-
-        public String getGrade() {
-            return grade;
-        }
-
-        @Override
-        public String toString() {
-            return "Score: " + score + ", Grade: " + grade;
-        }
+        // 점수와 등급을 반환 getScore, getGrade
+        public int getScore() { return score; }
+        public String getGrade() { return grade; }
     }
 
-    // 점수 추가 기능
+    // 특정 학생의 특정 과목에 대해 특정 회차의 점수를 추가하는 역할
+    // studentId : 학생의 고유 ID, subject : 학생이 수강하는 과목, attempt : 회차 score : 점수
     public static void addScore(String studentId, String subject, int attempt, int score) {
         if (score < 0 || score > 100) {
             System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다.");
             return;
         }
 
+        // studentId(학생 ID)와 subject(과목 이름)를 연결하여 하나의 키를 생성
+        // 중간에 "-" 사용하는 이유 : 문자열을 결합할 때 구분자를 사용하여 명확하게 구분하고 읽기 쉽게 만들기 위해 "-" 같은 특수 문자를 사용
+        // 구분자가 없을경우 ID와 과목이름이 직접 연결되기에, 데이터 중복 및 오류발생 가능성이 있음.
         String key = studentId + "-" + subject;
 
+        // 해당 회차에 이미 점수가 있는지 확인
         if (scoreMap.containsKey(key) && scoreMap.get(key).containsKey(attempt)) {
             System.out.println("이미 해당 회차에 점수가 입력되어 있습니다.");
             return;
         }
 
-        String grade = calculateGrade(subject, score); // 등급 계산
+        // subject(과목)과 score(점수)를 기반으로 등급을 계산
+        String grade = calculateGrade(subject, score);
+
+        // key가 scoreMap에 없을 경우, 빈 맵(new HashMap<>)을 추가합니다.
+        // key가 scoreMap에 있을 경우, 맵에는 저장 하지 않는다.
+        // NullPointerException 방지하기 위해서 선언.
+        // 자바 초기화를 하지 않으면, 무조건 Null 이다.
+        // HashMap 같은 객체와 같은 타입은 선언이 없을시 null 이다.
+        // scoreMap.putIfAbsent(key, new HashMap<>()); 에서 에러가 없어야,
+        // scoreMap.get(key).put(attempt, new ScoreEntry(score, grade)); 작동되기 때문이다.
 
         scoreMap.putIfAbsent(key, new HashMap<>());
+        // 최종 : 맵.put 맵.get -> 잘못 입력(null, 잘못된 값) 방지.
+
+        // key로 scoreMap에서 값을 가져온 후, 해당 맵에 attempt(회차)에 대해 ScoreEntry 객체를 추가
+        // ScoreEntry는 점수와 등급을 저장하는 객체
         scoreMap.get(key).put(attempt, new ScoreEntry(score, grade));
     }
 
@@ -64,8 +76,14 @@ public class Score {
         } else {
             return "알 수 없는 과목"; // 예외 처리
         }
-    }
+        // 점수 등급 계산: calculateGrade 메서드에서 getCategory(subject)를
+        // 사용하여 과목이 필수인지 선택인지를 구분하고, 그에 따라 점수 등급을 계산
 
+        // 점수 추가 시 출력 메시지: add_Subjects_Score 메서드에서 getCategory(subject)를 사용하여 과목의 카테고리를 알아내고,
+        // 그에 따라 출력 메시지(예: "필수 과목", "선택 과목")를 결정
+
+        // 전체 회차별 점수 및 등급 조회: listAllScores 메서드에서도 각 과목이 필수인지 선택인지 구분하여 출력할 때 사용
+    }
 
     // 모든 수강 과목에 점수 추가
     private static void add_Subjects_Score() {
@@ -99,7 +117,6 @@ public class Score {
                         break;
                     }
                 }
-
                 if (!isAttemptUsed) {
                     break; // 유효한 회차 입력이 확인된 경우
                 }

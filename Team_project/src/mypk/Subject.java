@@ -79,7 +79,6 @@ public class Subject {
             }
         }
 
-
         // 선택과목 추가
         System.out.println("선택 과목 목록: " + ELECTIVE_SUBJECTS);
         boolean addingElectiveSubjects = true;
