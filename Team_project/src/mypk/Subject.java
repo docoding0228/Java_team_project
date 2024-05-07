@@ -7,7 +7,7 @@ import java.util.*;
 public class Subject {
     // 프로그램 실행 중에 값이 변경되지 않는 상수 리스트로, 필수 과목 목록을 미리 정의
     private static final List<String> REQUIRED_SUBJECTS = Arrays.asList("1.Java", "2.객체지향", "3.Spring", "4.JPA", "5.MySQL");
-    private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("1.디자인_패턴", "2.Spring _ecurity", "3.Redis", "4.MongoDB");
+    private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("1.디자인_패턴", "2.Spring Security", "3.Redis", "4.MongoDB");
 
     private static Map<String, List<String>> studentSubjects = new HashMap<>(); // 학생별 과목 목록
 
