@@ -5,7 +5,7 @@ import java.util.*;
 public class Score {
     private static final Scanner sc = new Scanner(System.in);
 
-    // 학생-과목을 키로 하고, 회차별 점수와 등급을 값으로 가지는 맵
+    // 학생의 수강 과목을 키로 하고, 회차별 점수와 등급을 값으로 가지는 맵
     private static final Map<String, Map<Integer, ScoreEntry>> scoreMap = new HashMap<>();
 
     // 학생-과목 구조의 클래스 정의
@@ -13,9 +13,9 @@ public class Score {
         private final int score;
         private final String grade;
 
-        public ScoreEntry(int score) {
+        public ScoreEntry(int score, String grade) {
             this.score = score;
-            this.grade = calculateGrade(score);
+            this.grade = grade;
         }
 
         public int getScore() {
@@ -35,46 +35,19 @@ public class Score {
     // 점수 추가 기능
     public static void addScore(String studentId, String subject, int attempt, int score) {
         if (score < 0 || score > 100) {
-            System.out.println("점수는 0~100 사이여야 합니다.");
+            System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다.");
             return;
         }
+
         String key = studentId + "-" + subject;
+        String grade = calculateGrade(subject, score); // 등급 계산
 
         scoreMap.putIfAbsent(key, new HashMap<>());
-        scoreMap.get(key).put(attempt, new ScoreEntry(score));
-    }
-
-    // 과목이 필수과목인지 선택과목인지 구분
-    private static String getCategory(String subject) {
-        List<String> requiredSubjects = Subject.getRequiredSubjects(); // 필수 과목 목록
-        List<String> electiveSubjects = Subject.getElectiveSubjects(); // 선택 과목 목록
-
-        if (requiredSubjects.contains(subject)) {
-            return "필수 과목";
-        } else if (electiveSubjects.contains(subject)) {
-            return "선택 과목";
-        } else {
-            return "알 수 없는 과목"; // 예외 처리
-        }
-    }
-
-    // 점수에 따른 등급을 계산
-    public static String calculateGrade(int score) {
-        if (score >= 90) {
-            return "A";
-        } else if (score >= 80) {
-            return "B";
-        } else if (score >= 70) {
-            return "C";
-        } else if (score >= 60) {
-            return "D";
-        } else {
-            return "F";
-        }
+        scoreMap.get(key).put(attempt, new ScoreEntry(score, grade));
     }
 
     // 모든 수강 과목에 점수 추가
-    private static void addScoresForAllSubjects() {
+    private static void add_Subjects_Score() {
         System.out.print("수강생 ID를 입력하세요: ");
         String studentId = sc.next();
 
@@ -96,19 +69,66 @@ public class Score {
         }
 
         for (String subject : subjects) {
-            String category = getCategory(subject); // 필수/선택 구분
-            System.out.print(category + " " + subject + "에 대한 점수를 입력하세요 (0~100): ");
-            int score = sc.nextInt();
+            while (true) { // 점수가 유효할 때까지 반복
+                String category = getCategory(subject);
+                System.out.print(category + " " + subject + "에 대한 점수를 입력하세요 (0~100): ");
+                int score = sc.nextInt();
 
-            addScore(studentId, subject, attempt, score);
+                if (score < 0 || score > 100) {
+                    System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다. 다시 입력하세요.");
+                } else {
+                    addScore(studentId, subject, attempt, score);
+                    System.out.println(category + " " + subject + "에 점수가 등록되었습니다.");
+                    break; // 유효한 점수를 입력하면 루프 종료
+                }
+            }
+        }
+    }
 
-            System.out.println(category + " " + subject + "에 점수가 등록되었습니다.");
+    // 점수에 따른 등급을 계산
+    public static String calculateGrade(String subject, int score) {
+        String category = getCategory(subject);
+        int scoreRankInt = score;
+
+        if (category.equals("필수 과목")) {
+            switch (scoreRankInt / 10) {
+                case 10:
+                case 9:
+                    if (scoreRankInt >= 95) {
+                        return "A";
+                    } else {
+                        return "B";
+                    }
+                case 8:
+                    return "C";
+                case 7:
+                    return "D";
+                case 6:
+                    return "F";
+                default:
+                    return "N";
+            }
+        } else {
+            // 선택 과목
+            switch (scoreRankInt / 10) {
+                case 10:
+                    return "A";
+                case 9:
+                    return "B";
+                case 8:
+                    return "C";
+                case 7:
+                    return "D";
+                case 6:
+                    return "F";
+                default:
+                    return "N";
+            }
         }
     }
 
     // 전체 회차별 점수 및 등급 조회
     public static void listAllScores() {
-        // 학생-과목 키를 파싱하여 학생별로 그룹화
         Map<String, Map<Integer, Map<String, ScoreEntry>>> groupedScores = new HashMap<>();
 
         for (String key : scoreMap.keySet()) {
@@ -128,24 +148,57 @@ public class Score {
             }
         }
 
-        // 그룹화된 결과를 출력
+        // 출력 형식 변경 및 정렬
         for (String studentId : groupedScores.keySet()) {
             Map<Integer, Map<String, ScoreEntry>> attempts = groupedScores.get(studentId);
 
             for (int attempt : attempts.keySet()) {
-                System.out.println("학생 번호: " + studentId + ", 회차: " + attempt + " 회차");
+                System.out.println("학생 번호: " + studentId + ", 회차: " + attempt + "회차");
 
                 Map<String, ScoreEntry> subjects = attempts.get(attempt);
 
-                for (String subject : subjects.keySet()) {
-                    ScoreEntry scoreEntry = subjects.get(subject);
+                List<String> requiredSubjects = new ArrayList<>();
+                List<String> electiveSubjects = new ArrayList<>();
 
-                    System.out.println(
-                            "과목: " + subject + " | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
+                for (String subject : subjects.keySet()) {
+                    String category = getCategory(subject);
+                    if (category.equals("필수 과목")) {
+                        requiredSubjects.add(subject);
+                    } else {
+                        electiveSubjects.add(subject);
+                    }
+                }
+
+                requiredSubjects.sort(Comparator.naturalOrder());
+                electiveSubjects.sort(Comparator.naturalOrder());
+
+                System.out.println("================ 필수 과목 ================");
+                for (String subject : requiredSubjects) {
+                    ScoreEntry scoreEntry = subjects.get(subject);
+                    System.out.println("과목: " + subject + " | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
+                }
+
+                System.out.println("================ 선택 과목 ================");
+                for (String subject : electiveSubjects) {
+                    ScoreEntry scoreEntry = subjects.get(subject);
+                    System.out.println("과목: " + subject + " | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
                 }
 
                 System.out.println(); // 회차 구분을 위해 빈 줄 추가
             }
+        }
+    }
+
+    private static String getCategory(String subject) {
+        List<String> requiredSubjects = Subject.getRequiredSubjects(); // 필수 과목 목록
+        List<String> electiveSubjects = Subject.getElectiveSubjects(); // 선택 과목 목록
+
+        if (requiredSubjects.contains(subject)) {
+            return "필수 과목";
+        } else if (electiveSubjects.contains(subject)) {
+            return "선택 과목";
+        } else {
+            return "알 수 없는 과목"; // 예외 처리
         }
     }
 
@@ -173,8 +226,7 @@ public class Score {
 
                 switch (choice) {
                     case 1:
-                        System.out.println("과목별 시험 회차 및 점수 등록 기능 호출");
-                        addScoresForAllSubjects(); // 점수 추가
+                        add_Subjects_Score(); // 모든 수강 과목에 점수 추가
                         break;
                     case 2:
                         //editScoresForSubject(); // 회차별 점수 수정
@@ -187,7 +239,6 @@ public class Score {
                         break;
                     default:
                         System.out.println("잘못된 입력입니다.");
-                        running = false;
                 }
             } catch (InputMismatchException e) {
                 System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");

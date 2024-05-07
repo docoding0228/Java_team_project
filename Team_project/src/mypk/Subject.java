@@ -116,6 +116,8 @@ public class Subject {
 
     }
 
+    // ================================== 스코어로 인한 추가
+
     // 수강생의 수강 과목 목록을 반환
     public static List<String> getStudentSubjects(String studentId) {
         if (studentSubjects.containsKey(studentId)) {
@@ -135,6 +137,8 @@ public class Subject {
     public static List<String> getElectiveSubjects() {
         return ELECTIVE_SUBJECTS; // 선택 과목 목록 반환
     }
+
+    // ================================== 스코어로 인한 추가
 
     public void correction() {
 
