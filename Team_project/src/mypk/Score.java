@@ -107,17 +107,17 @@ public class Score {
             if (attempt < 1 || attempt > 10) {
                 System.out.println("회차는 1~10 사이여야 합니다. 다시 입력하세요.");
             } else {
-                boolean isAttemptUsed = false;
+                boolean attemptcheck = false;
 
                 for (String subject : subjects) {
                     String key = studentId + "-" + subject;
                     if (scoreMap.containsKey(key) && scoreMap.get(key).containsKey(attempt)) {
                         System.out.println("이미 해당 회차에 점수가 입력되어 있습니다.");
-                        isAttemptUsed = true;
+                        attemptcheck = true;
                         break;
                     }
                 }
-                if (!isAttemptUsed) {
+                if (!attemptcheck) {
                     break; // 유효한 회차 입력이 확인된 경우
                 }
             }
@@ -179,20 +179,45 @@ public class Score {
     // 전체 회차별 점수 및 등급 조회
     public static void listAllScores() {
         Map<String, Map<Integer, Map<String, ScoreEntry>>> groupedScores = new HashMap<>();
+        // 학생 ID, 회차, 과목에 따라 점수와 등급을 저장하기 위한 맵 - groupedScores 초기화
 
+        // scoreMap의 모든 키를 순회하면서 각 키에 대한 데이터를 가져온다.
+        // keySet() = 주어진 맵의 모든 키를 Set 형태로 반환하는 메서드
+        // scoreMap에 있는 모든 키를 Set 형태로 얻을 수 있다.
         for (String key : scoreMap.keySet()) {
+
+            // key를 "-"로 분리하여 studentId(학생 ID)와 subject(과목 이름)를 추출
+            // 다시 분리하는 이유 :
+            // studentId는 학생별로 데이터를 그룹화하거나 학생 정보를 조회하는데 사용
+            // subject는 과목별로 작업을 수행하거나 과목 정보를 가져오는 데 사용
+
+            // 학생 ID와 과목 분리: 예를 들어, key가 "123-Math"라면,
+            // split("-")을 사용하면 parts[0]에는 "123"이, parts[1]에는 "Math"가 저장
+            // 최종 : 여러 정보가 연결되어 있는 경우 각 부분을 쉽게 추출
             String[] parts = key.split("-"); // 학생 번호와 과목을 분리
             String studentId = parts[0];
             String subject = parts[1];
 
+            // key로 scoreMap에서 회차별 점수 맵을 가져옴. 해당 맵은 Integer(회차)와 ScoreEntry(점수와 등급)로 구성
             Map<Integer, ScoreEntry> scores = scoreMap.get(key);
 
+            // scores의 모든 회차와 점수-등급 엔트리를 순회하면서 데이터를 조회.
+            // Map.Entry 를 사용함으로써, Map.Entry의 집합을 얻고, 이를 기반으로 맵의 모든 키-값 쌍을 순회
+            // Map.Entry를 사용하면 getKey() 메서드를 통해 키에 접근하고, getValue() 메서드를 통해 값에 접근
+            // 최종 : 맵의 특정 엔트리에 접근하거나, 키와 값을 추출
             for (Map.Entry<Integer, ScoreEntry> entry : scores.entrySet()) {
+
+                // 각 회차의 점수와 등급을 변수에 저장.
                 int attempt = entry.getKey();
                 ScoreEntry scoreEntry = entry.getValue();
 
-                groupedScores.putIfAbsent(studentId, new HashMap<>());
-                groupedScores.get(studentId).putIfAbsent(attempt, new HashMap<>());
+                // studentId(학생 ID) 키가 존재하지 않을 때 빈 HashMap을 추가합니다
+                groupedScores.putIfAbsent(studentId, new HashMap<>()); // 학생 ID별 맵 추가
+
+                // attempt(회차) 키가 존재하지 않을 때 빈 HashMap을 추가합니다
+                groupedScores.get(studentId).putIfAbsent(attempt, new HashMap<>()); // 회차별 맵 추가
+
+                // 학생과 특정 회차 데이터를 가져옴 -> 학생 ID와 회차별로 과목별 점수와 등급을 저장하는 역할
                 groupedScores.get(studentId).get(attempt).put(subject, scoreEntry);
             }
         }
@@ -232,7 +257,6 @@ public class Score {
                     ScoreEntry scoreEntry = subjects.get(subject);
                     System.out.println("과목: " + subject + " | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
                 }
-
                 System.out.println(); // 회차 구분을 위해 빈 줄 추가
             }
         }
