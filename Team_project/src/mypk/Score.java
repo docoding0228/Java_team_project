@@ -40,11 +40,32 @@ public class Score {
         }
 
         String key = studentId + "-" + subject;
+
+        if (scoreMap.containsKey(key) && scoreMap.get(key).containsKey(attempt)) {
+            System.out.println("이미 해당 회차에 점수가 입력되어 있습니다.");
+            return;
+        }
+
         String grade = calculateGrade(subject, score); // 등급 계산
 
         scoreMap.putIfAbsent(key, new HashMap<>());
         scoreMap.get(key).put(attempt, new ScoreEntry(score, grade));
     }
+
+    // 과목이 필수과목인지 선택과목인지 구분
+    private static String getCategory(String subject) {
+        List<String> requiredSubjects = Subject.getRequiredSubjects(); // 필수 과목 목록
+        List<String> electiveSubjects = Subject.getElectiveSubjects(); // 선택 과목 목록
+
+        if (requiredSubjects.contains(subject)) {
+            return "필수 과목";
+        } else if (electiveSubjects.contains(subject)) {
+            return "선택 과목";
+        } else {
+            return "알 수 없는 과목"; // 예외 처리
+        }
+    }
+
 
     // 모든 수강 과목에 점수 추가
     private static void add_Subjects_Score() {
@@ -59,15 +80,33 @@ public class Score {
         }
 
         System.out.println("수강 과목 목록: " + subjects);
+        int attempt = -1;
 
-        System.out.print("회차를 입력하세요 (1~10): ");
-        int attempt = sc.nextInt();
+        while (true) { // 회차 입력이 유효할 때까지 반복
+            System.out.print("회차를 입력하세요 (1~10): ");
+            attempt = sc.nextInt();
 
-        if (attempt < 1 || attempt > 10) {
-            System.out.println("회차는 1~10 사이여야 합니다.");
-            return;
+            if (attempt < 1 || attempt > 10) {
+                System.out.println("회차는 1~10 사이여야 합니다. 다시 입력하세요.");
+            } else {
+                boolean isAttemptUsed = false;
+
+                for (String subject : subjects) {
+                    String key = studentId + "-" + subject;
+                    if (scoreMap.containsKey(key) && scoreMap.get(key).containsKey(attempt)) {
+                        System.out.println("이미 해당 회차에 점수가 입력되어 있습니다.");
+                        isAttemptUsed = true;
+                        break;
+                    }
+                }
+
+                if (!isAttemptUsed) {
+                    break; // 유효한 회차 입력이 확인된 경우
+                }
+            }
         }
 
+        // 유효한 회차 입력 후 점수 추가
         for (String subject : subjects) {
             while (true) { // 점수가 유효할 때까지 반복
                 String category = getCategory(subject);
@@ -79,7 +118,7 @@ public class Score {
                 } else {
                     addScore(studentId, subject, attempt, score);
                     System.out.println(category + " " + subject + "에 점수가 등록되었습니다.");
-                    break; // 유효한 점수를 입력하면 루프 종료
+                    break; // 유효한 점수 입력 후 루프 종료
                 }
             }
         }
@@ -88,41 +127,30 @@ public class Score {
     // 점수에 따른 등급을 계산
     public static String calculateGrade(String subject, int score) {
         String category = getCategory(subject);
-        int scoreRankInt = score;
 
         if (category.equals("필수 과목")) {
-            switch (scoreRankInt / 10) {
-                case 10:
-                case 9:
-                    if (scoreRankInt >= 95) {
-                        return "A";
-                    } else {
-                        return "B";
-                    }
-                case 8:
-                    return "C";
-                case 7:
-                    return "D";
-                case 6:
-                    return "F";
-                default:
-                    return "N";
+            if (score >= 95) {
+                return "A";
+            } else if (score >= 90) {
+                return "B";
+            } else if (score >= 80) {
+                return "C";
+            } else if (score >= 70) {
+                return "D";
+            } else {
+                return "F";
             }
-        } else {
-            // 선택 과목
-            switch (scoreRankInt / 10) {
-                case 10:
-                    return "A";
-                case 9:
-                    return "B";
-                case 8:
-                    return "C";
-                case 7:
-                    return "D";
-                case 6:
-                    return "F";
-                default:
-                    return "N";
+        } else { // 선택 과목
+            if (score >= 90) {
+                return "A";
+            } else if (score >= 80) {
+                return "B";
+            } else if (score >= 70) {
+                return "C";
+            } else if (score >= 60) {
+                return "D";
+            } else {
+                return "F";
             }
         }
     }
@@ -186,19 +214,6 @@ public class Score {
 
                 System.out.println(); // 회차 구분을 위해 빈 줄 추가
             }
-        }
-    }
-
-    private static String getCategory(String subject) {
-        List<String> requiredSubjects = Subject.getRequiredSubjects(); // 필수 과목 목록
-        List<String> electiveSubjects = Subject.getElectiveSubjects(); // 선택 과목 목록
-
-        if (requiredSubjects.contains(subject)) {
-            return "필수 과목";
-        } else if (electiveSubjects.contains(subject)) {
-            return "선택 과목";
-        } else {
-            return "알 수 없는 과목"; // 예외 처리
         }
     }
 
