@@ -115,6 +115,27 @@ public class Subject {
         System.out.println("선택 과목: " + subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).toList());
 
     }
+
+    // 수강생의 수강 과목 목록을 반환
+    public static List<String> getStudentSubjects(String studentId) {
+        if (studentSubjects.containsKey(studentId)) {
+            return new ArrayList<>(studentSubjects.get(studentId)); // 안전을 위해 복사본 반환
+        } else {
+            System.out.println("수강생 ID " + studentId + "에 등록된 수강 과목이 없습니다.");
+            return Collections.emptyList(); // 빈 리스트 반환
+        }
+    }
+
+    // 필수 과목 목록 반환
+    public static List<String> getRequiredSubjects() {
+        return REQUIRED_SUBJECTS; // 필수 과목 목록 반환
+    }
+
+    // 선택 과목 목록 반환
+    public static List<String> getElectiveSubjects() {
+        return ELECTIVE_SUBJECTS; // 선택 과목 목록 반환
+    }
+
     public void correction() {
 
     }
@@ -181,7 +202,7 @@ public class Subject {
                                     System.out.println("잘못된 입력입니다.");
                                     break;
                             }
-
+    
                         System.out.println("추가할 과목의 번호를 입력하세요: ");
                         int newSubjectIndex = sc.nextInt();
                         if (newSubjectIndex >= 1 && newSubjectIndex <= subjectCategory.size()) {
