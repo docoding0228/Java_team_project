@@ -203,7 +203,7 @@ public class Subject {
                             System.out.println("과목이 추가되었습니다.");
                             break;
                         } else {
-                            System.out.println("이미 선택한 과목입니다.");
+                            System.out.println("이미 선택한 과목입니다. ");
                         }
                     } else {
                         System.out.println("잘못된 과목 번호입니다.");
