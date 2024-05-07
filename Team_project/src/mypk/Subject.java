@@ -6,8 +6,8 @@ import java.util.*;
 
 public class Subject {
     // 프로그램 실행 중에 값이 변경되지 않는 상수 리스트로, 필수 과목 목록을 미리 정의
-    private static final List<String> REQUIRED_SUBJECTS = Arrays.asList("1.Java", "2.객체지향", "3.Spring", "4.JPA", "5.MySQL");
-    private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("1.디자인_패턴", "2.Spring Security", "3.Redis", "4.MongoDB");
+    private static final List<String> REQUIRED_SUBJECTS = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
+    private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("디자인_패턴", "Spring_Security", "Redis", "MongoDB");
 
     private static Map<String, List<String>> studentSubjects = new HashMap<>(); // 학생별 과목 목록
 
@@ -39,8 +39,13 @@ public class Subject {
         //studentSubjects.get(studentId) << 빈어레이 리스트  List<String> subjectlist = studentSubjects.get(studentId);
 
         // 필수과목 추가
-        System.out.println("필수 과목 목록: " + REQUIRED_SUBJECTS);
-        System.out.println("필수 과목을 최소 3개 이상 선택하세요.");
+        System.out.print("필수 과목 목록: ");
+        for (int i = 0; i < ELECTIVE_SUBJECTS.size(); i++) {
+            System.out.print("[" + (i + 1) + ". " + REQUIRED_SUBJECTS.get(i) + "], ");
+        }
+        
+        System.out.println("[" + (5) + ". " + REQUIRED_SUBJECTS.get(4) + "]");
+        
         boolean addingRequiredSubjects = true;
         int subjectSize = 0;
 
@@ -80,7 +85,12 @@ public class Subject {
         }
 
         // 선택과목 추가
-        System.out.println("선택 과목 목록: " + ELECTIVE_SUBJECTS);
+       System.out.print("필수 과목 목록: ");
+        for (int i = 0; i < ELECTIVE_SUBJECTS.size() - 1; i++) {
+            System.out.print("[" + (i + 1) + ". " + ELECTIVE_SUBJECTS.get(i) + "], ");
+        }
+        System.out.println("[4. " + ELECTIVE_SUBJECTS.get(3) + "]");
+        
         boolean addingElectiveSubjects = true;
 
         while (addingElectiveSubjects) {
