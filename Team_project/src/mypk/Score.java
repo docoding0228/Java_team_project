@@ -5,6 +5,7 @@ import java.util.*;
 public class Score {
     private static final Scanner sc = new Scanner(System.in);
 
+    // 학생의 수강 과목을 키로 하고, 회차별 점수와 등급을 값으로 가지는 맵
     private static final Map<String, Map<Integer, ScoreEntry>> scoreMap = new HashMap<>();
     // String : 학생 ID와 과목
     // Integer : 회차
@@ -262,6 +263,48 @@ public class Score {
         }
     }
 
+    public static void listAllScoresBySubject() {
+        List<String> allSubjects = new ArrayList<>();
+        for (String key : scoreMap.keySet()) {
+            String[] parts = key.split("-"); // 학생 번호와 과목을 분리
+            String subject = parts[1];
+            if (!allSubjects.contains(subject)) {
+                allSubjects.add(subject);
+            }
+        }
+        System.out.println("등록된 수강 과목 목록: " + allSubjects);
+        // 조회할 과목을 입력받음
+        System.out.print("조회할 과목을 입력하세요: ");
+        String subjectToSearch = sc.next();
+
+        boolean found = false; // 조회된 결과가 있는지 확인하기 위한 변수
+
+        // 입력한 과목에 대한 등급을 조회
+        for (String key : scoreMap.keySet()) {
+            String[] parts = key.split("-"); // 학생 번호와 과목을 분리
+            String studentId = parts[0];
+            String subject = parts[1];
+
+            if (subject.equals(subjectToSearch)) {
+                Map<Integer, ScoreEntry> scores = scoreMap.get(key);
+                found = true; // 조회된 결과가 있다고 표시
+                System.out.println("학생 번호: " + studentId + ", 과목: " + subject);
+
+                for (int attempt : scores.keySet()) {
+                    ScoreEntry scoreEntry = scores.get(attempt);
+                    System.out.println("회차: " + attempt + "회차 | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
+                }
+                System.out.println(); // 과목별 회차 구분을 위해 빈 줄 추가
+            }
+        }
+
+        // 조회된 결과가 없는 경우 메시지 출력
+        if (!found) {
+            System.out.println("해당 과목에 대한 등급 정보가 없습니다.");
+        }
+    }
+
+
     // 점수 관리 메뉴
     public static void displayScoreView() throws InterruptedException {
         boolean running = true;
@@ -278,6 +321,7 @@ public class Score {
             System.out.println("1. 과목별 시험 회차 및 점수 등록");
             System.out.println("2. 과목별 회차 점수 수정");
             System.out.println("3. 전체 회차별 점수 및 등급 조회");
+            System.out.println("4. 특정 과목 회차별 등급을 조회");
             System.out.println("4. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요: ");
 
@@ -295,6 +339,9 @@ public class Score {
                         listAllScores(); // 전체 회차별 점수 및 등급 조회
                         break;
                     case 4:
+                        listAllScoresBySubject();
+                        break;
+                    case 5:
                         running = false; // 메인 화면 이동
                         break;
                     default:
