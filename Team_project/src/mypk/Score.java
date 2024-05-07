@@ -59,7 +59,7 @@ public class Score {
             System.out.println("2. 과목별 회차 점수 수정");
             System.out.println("3. 특정 과목 회차별 등급 조회");
             System.out.println("4. 메인 화면 이동");
-            System.out.print("관리 항목을 선택하세요... ");
+            System.out.print("관리 항목을 선택하세요...");
 
             // 수강생 번호 입력하고, 학생 - 수강생 일치하는 고유번호
             // 선택, 필수 if else
