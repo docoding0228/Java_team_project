@@ -16,7 +16,7 @@ public class Main {
             System.out.println("1. 수강생 관리");
             System.out.println("2. 프로그램 종료");
             System.out.print("관리 항목을 선택하세요... ");
-
+//
             int choice = sc.nextInt();
 
             switch (choice) {
