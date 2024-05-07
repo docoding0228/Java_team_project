@@ -224,6 +224,7 @@ public class Score {
         }
 
         // 출력 형식 변경 및 정렬
+        // 학생 ID별로 데이터(회차별 과목별 점수와 등급)를 저장
         for (String studentId : groupedScores.keySet()) {
             Map<Integer, Map<String, ScoreEntry>> attempts = groupedScores.get(studentId);
 
@@ -243,7 +244,6 @@ public class Score {
                         electiveSubjects.add(subject);
                     }
                 }
-
                 requiredSubjects.sort(Comparator.naturalOrder());
                 electiveSubjects.sort(Comparator.naturalOrder());
 
