@@ -24,8 +24,13 @@ public class Score {
         }
 
         // 점수와 등급을 반환 getScore, getGrade
-        public int getScore() { return score; }
-        public String getGrade() { return grade; }
+        public int getScore() {
+            return score;
+        }
+
+        public String getGrade() {
+            return grade;
+        }
     }
 
     // 특정 학생의 특정 과목에 대해 특정 회차의 점수를 추가하는 역할
@@ -220,15 +225,15 @@ public class Score {
         }
 
         System.out.print("수강중인 과목 목록: ");
-        for (int i = 0; i < subjects.size()-1; i++) {
+        for (int i = 0; i < subjects.size() - 1; i++) {
             System.out.print("[" + (i + 1) + ". " + subjects.get(i) + "], ");
         }
-        System.out.println("[" + (subjects.size()) + ". " + subjects.get(subjects.size()-1) + "]");
+        System.out.println("[" + (subjects.size()) + ". " + subjects.get(subjects.size() - 1) + "]");
 
         int subjectSize = 0;
         String subjectToEdit;
 
-        while(true) {
+        while (true) {
             System.out.print("수정하고 싶은 과목의 번호를 입력하세요: ");
             int editSubjectsIndex = sc.nextInt();
             // 입력한 번호가 1이상이고 리스트 크기 이하인지 확인
@@ -245,7 +250,7 @@ public class Score {
 
         int attempt = -1;
 
-        if(scoreMap.containsKey(key)) {
+        if (scoreMap.containsKey(key)) {
             while (true) { // 회차 입력이 유효할 때까지 반복
                 System.out.print("회차를 입력하세요 (1~10): ");
                 attempt = sc.nextInt();
@@ -265,8 +270,7 @@ public class Score {
                     }
                 }
             }
-        }
-        else{
+        } else {
             System.out.println("등록되지 않은 과목입니다.");
         }
 
@@ -432,17 +436,50 @@ public class Score {
             if (subject.equals(subjectToSearch)) {
                 Map<Integer, ScoreEntry> scores = scoreMap.get(key);
                 found = true; // 조회된 결과가 있다고 표시
-                System.out.println("학생 번호: " + studentId + ", 과목: " + subject);
 
-                for (int attempt : scores.keySet()) {
-                    ScoreEntry scoreEntry = scores.get(attempt);
-                    System.out.println("회차: " + attempt + "회차 | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
+                System.out.println("학생 번호: " + studentId + ", 과목: " + subject);
+                System.out.println("1.특정 과목의 회차별 등급 조회");
+                System.out.println("2.특정 과목의 평균 등급 조회");
+
+                try {
+                    int Subjectchoice = sc.nextInt();
+
+                    switch (Subjectchoice) {
+                        case 1:       // 입력한 과목에 대한 회차별 등급을 조회
+                            for (int attempt : scores.keySet()) {
+                                ScoreEntry scoreEntry = scores.get(attempt);
+                                System.out.println("회차: " + attempt + "회차 | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
+                                System.out.println(); // 과목별 회차 구분을 위해 빈 줄 추가
+                            }
+                            break;
+                        case 2: // 입력한 과목에 대한 등급 평균 조회
+                            int totalScore = 0;
+                            int totalAttempts = scores.size(); // 과목의 총 회차 수
+                            for (ScoreEntry scoreEntry : scores.values()) {
+                                totalScore += scoreEntry.getScore();
+                            } //모든 회차를 점수 누적 -> totalScore 할당
+
+                            if (totalAttempts > 0) {
+                                double averageScore = (double) totalScore / totalAttempts;
+                                //총점수/회차
+                                String averageGrade = calculateGrade(subjectToSearch, (int) Math.round(averageScore));
+                                //선택과목, (int 형변환)평균점수 -> calculateGrade로 전달
+                                System.out.println("과목의 평균 등급: " + averageGrade);
+                            } else {
+                                System.out.println("해당 과목에 대한 등급 정보가 없습니다.");
+                            }
+                            break;
+                        default:
+                            System.out.println("잘못된 입력입니다.");
+                    }
+
+                } catch (InputMismatchException e) {
+                    System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
+                    sc.nextLine(); // 잘못된 입력을 버퍼에서 제거
                 }
-                System.out.println(); // 과목별 회차 구분을 위해 빈 줄 추가
             }
         }
-
-        // 조회된 결과가 없는 경우 메시지 출력
+        //과목 조회 결과가 없을 경우 메세지
         if (!found) {
             System.out.println("해당 과목에 대한 등급 정보가 없습니다.");
         }
@@ -455,7 +492,6 @@ public class Score {
         while (running) {
             System.out.print("점수 관리를 실행하시겠습니까? (YES/NO): ");
             String answer = sc.next();
-
             if ("no".equalsIgnoreCase(answer)) {
                 break;
             }
@@ -465,8 +501,8 @@ public class Score {
             System.out.println("1. 시험 회차 별 점수 등록");
             System.out.println("2. 과목별 회차 점수 수정");
             System.out.println("3. 전체 회차별 점수 및 등급 조회");
-            System.out.println("4. 특정 과목 회차별 등급을 조회");
-            System.out.println("4. 메인 화면 이동");
+            System.out.println("4. 특정 과목 회차별 등급을 조회 및 평균 점수");
+            System.out.println("5. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요: ");
 
             try {
