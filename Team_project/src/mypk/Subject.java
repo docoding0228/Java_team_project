@@ -3,17 +3,15 @@ package mypk;
 import mypk.Student;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Subject {
     // 프로그램 실행 중에 값이 변경되지 않는 상수 리스트로, 필수 과목 목록을 미리 정의
     private static final List<String> REQUIRED_SUBJECTS = Arrays.asList("Java", "객체지향", "Spring", "JPA", "MySQL");
     private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("디자인_패턴", "Spring_Security", "Redis", "MongoDB");
 
-    private static final Map<String, List<String>> studentSubjects = new HashMap<>(); // 학생별 과목 목록
+    private static Map<String, List<String>> studentSubjects = new HashMap<>(); // 학생별 과목 목록
 
-    private static final Scanner sc = new Scanner(System.in);
+    private static Scanner sc = new Scanner(System.in);
 
     // 수강생 과목 추가
     public static void manageSubjects() throws InterruptedException {
@@ -37,18 +35,17 @@ public class Subject {
 
         // studentSubjects 맵에서 studentId에 해당하는 값을 가져와 subjects 리스트에 할당
         // 수강생 ID에 대해 어떤 과목이 등록되어 있는지 확인하거나 추가 작업을 수행할 때 사용
-        List<String> subjectlist = studentSubjects.get(studentId); //Java << 1, 100 A, 2, 90  B
+        List<String> subjectlist = studentSubjects.get(studentId);
         //studentSubjects.get(studentId) << 빈어레이 리스트  List<String> subjectlist = studentSubjects.get(studentId);
 
         // 필수과목 추가
         System.out.print("필수 과목 목록: ");
-        for (int i = 0; i < REQUIRED_SUBJECTS.size()-1; i++) {
+        for (int i = 0; i < ELECTIVE_SUBJECTS.size(); i++) {
             System.out.print("[" + (i + 1) + ". " + REQUIRED_SUBJECTS.get(i) + "], ");
         }
+        
         System.out.println("[" + (5) + ". " + REQUIRED_SUBJECTS.get(4) + "]");
-
-//        System.out.println("필수 과목 목록: " + REQUIRED_SUBJECTS);
-        System.out.println("필수 과목을 최소 3개 이상 선택하세요.");
+        
         boolean addingRequiredSubjects = true;
         int subjectSize = 0;
 
@@ -64,8 +61,6 @@ public class Subject {
                 String requiredSubject = REQUIRED_SUBJECTS.get(requiredSubjectsIndex - 1);
                 //가져온 과목이 이미 선택한 과목인지 확인 아니라면 목록에 추가
                 if (!subjectlist.contains(requiredSubject)) {
-//                    Pattern pattern = Pattern.compile("[0-9]+\\.+(.+)");
-//                    Matcher matcher = pattern.matcher(requiredSubject);
                     subjectlist.add(requiredSubject);
                     subjectSize++;
                 } else {
@@ -89,13 +84,13 @@ public class Subject {
             }
         }
 
-
         // 선택과목 추가
-        System.out.print("필수 과목 목록: ");
+       System.out.print("필수 과목 목록: ");
         for (int i = 0; i < ELECTIVE_SUBJECTS.size() - 1; i++) {
             System.out.print("[" + (i + 1) + ". " + ELECTIVE_SUBJECTS.get(i) + "], ");
         }
         System.out.println("[4. " + ELECTIVE_SUBJECTS.get(3) + "]");
+        
         boolean addingElectiveSubjects = true;
 
         while (addingElectiveSubjects) {
@@ -127,16 +122,41 @@ public class Subject {
         System.out.println("수강생 ID: " + studentId);
         System.out.println("필수 과목: " + subjectlist.stream().filter(REQUIRED_SUBJECTS::contains).toList());
         System.out.println("선택 과목: " + subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).toList());
+
     }
 
-    //.stream().filter(ELECTIVE_SUBJECTS::contains).toList()
+    // ================================== 스코어로 인한 추가
+
+    // 수강생의 수강 과목 목록을 반환
+    public static List<String> getStudentSubjects(String studentId) {
+        if (studentSubjects.containsKey(studentId)) {
+            return new ArrayList<>(studentSubjects.get(studentId)); // 안전을 위해 복사본 반환
+        } else {
+            System.out.println("수강생 ID " + studentId + "에 등록된 수강 과목이 없습니다.");
+            return Collections.emptyList(); // 빈 리스트 반환
+        }
+    }
+
+    // 필수 과목 목록 반환
+    public static List<String> getRequiredSubjects() {
+        return REQUIRED_SUBJECTS; // 필수 과목 목록 반환
+    }
+
+    // 선택 과목 목록 반환
+    public static List<String> getElectiveSubjects() {
+        return ELECTIVE_SUBJECTS; // 선택 과목 목록 반환
+    }
+
+    // ================================== 스코어로 인한 추가
+
     public void correction() {
 
     }
 
-    //조회 기능
+   //조회 기능
     public static void subjectCheck() {
-        String studentId = Student.pushID();
+        System.out.println("수강생 ID를 입력해주세요:");
+        String studentId = sc.next();
 
         if (!Student.isRegistered(studentId)) {//등록 확인
             System.out.println("등록되지 않은 학생입니다.");
@@ -151,8 +171,10 @@ public class Subject {
         }
     }
 
+   //수정기능
     public static void subjectEdit() {
-        String pushId = Student.pushID();
+        System.out.println("수정할 수강생 ID를 입력해주세요.");
+        String pushId = sc.next();//ID입역
 
         //등록 안되어있는경우
         if (!Student.isRegistered(pushId)) {
@@ -167,54 +189,54 @@ public class Subject {
                 break;
             } else {
                 System.out.println("수정할 과목: " + subjectlist);
-                System.out.println("1. 추가");
-                System.out.println("2. 삭제");
-                int editChoice = sc.nextInt();
+                    System.out.println("1. 추가");
+                    System.out.println("2. 삭제");
+                    int editChoice = sc.nextInt();
 
-                if (editChoice == 1) {
-                    //추가기능
-                    System.out.println("추가할 과목의 종류를 선택하세요 (필수과목:1, 선택과목:2): ");
-                    int category = sc.nextInt();
-                    List<String> subjectCategory = null; //초기화
-                    if (category == 1) {
-                        subjectCategory = REQUIRED_SUBJECTS;
-                    } else if (category == 2) {
-                        subjectCategory = ELECTIVE_SUBJECTS;
-                    }
-
-                    switch (category) {// 과목 목록 출력
-                        case 1:
-                            System.out.println(REQUIRED_SUBJECTS);
-                            break;
-                        case 2:
-                            System.out.println(ELECTIVE_SUBJECTS);
-                            break;
-                        default:
-                            System.out.println("잘못된 입력입니다.");
-                            break;
-                    }
-
-                    System.out.println("추가할 과목의 번호를 입력하세요: ");
-                    int newSubjectIndex = sc.nextInt();
-                    if (newSubjectIndex >= 1 && newSubjectIndex <= subjectCategory.size()) {
-                        String newSubject = subjectCategory.get(newSubjectIndex - 1);
-                        if (!subjectlist.contains(newSubject)) {
-                            subjectlist.add(newSubject);
-                            System.out.println("과목이 추가되었습니다.");
-                            break;
-                        } else {
-                            System.out.println("이미 선택한 과목입니다. ");
+                    if (editChoice == 1) {
+                        //추가기능
+                        System.out.println("추가할 과목의 종류를 선택하세요 (필수과목:1, 선택과목:2): ");
+                        int category = sc.nextInt();
+                        List<String> subjectCategory = null; //초기화
+                        if (category == 1) {
+                            subjectCategory = REQUIRED_SUBJECTS;
+                        }else if (category == 2) {
+                            subjectCategory = ELECTIVE_SUBJECTS;
                         }
-                    } else {
-                        System.out.println("잘못된 과목 번호입니다.");
-                    }
 
-                    //삭제기능
-                } else if (editChoice == 2) {
-                    System.out.println("삭제할 과목 번호를 입력하세요: ");
-                    int subjectIndex = sc.nextInt();
+                           switch (category) {// 과목 목록 출력
+                                case 1:
+                                    System.out.println(REQUIRED_SUBJECTS);
+                                    break;
+                                case 2:
+                                    System.out.println(ELECTIVE_SUBJECTS);
+                                    break;
+                                default:
+                                    System.out.println("잘못된 입력입니다.");
+                                    break;
+                            }
+    
+                        System.out.println("추가할 과목의 번호를 입력하세요: ");
+                        int newSubjectIndex = sc.nextInt();
+                        if (newSubjectIndex >= 1 && newSubjectIndex <= subjectCategory.size()) {
+                            String newSubject = subjectCategory.get(newSubjectIndex - 1);
+                            if (!subjectlist.contains(newSubject)) {
+                                subjectlist.add(newSubject);
+                                System.out.println("과목이 추가되었습니다.");
+                                break;
+                            } else {
+                                System.out.println("이미 선택한 과목입니다.");
+                            }
+                        } else {
+                            System.out.println("잘못된 과목 번호입니다.");
+                        }
 
-                    if (subjectIndex >= 1 && subjectIndex <= subjectlist.size()) {
+                        //삭제기능
+                    } else if (editChoice == 2) {
+                        System.out.println("삭제할 과목 번호를 입력하세요: ");
+                        int subjectIndex = sc.nextInt();
+
+                        if (subjectIndex >= 1 && subjectIndex <= subjectlist.size()) {
                         subjectlist.remove(subjectIndex - 1);
                         System.out.println("과목이 삭제되었습니다.");
                         break;
