@@ -142,6 +142,128 @@ public class Score {
         }
     }
 
+    // 점수 수정 기능
+    public static void editScore(String studentId, String subject, int attempt, int score) {
+        if (score < 0 || score > 100) {
+            System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다.");
+            return;
+        }
+
+        // studentId(학생 ID)와 subject(과목 이름)를 연결하여 하나의 키를 생성
+        // 중간에 "-" 사용하는 이유 : 문자열을 결합할 때 구분자를 사용하여 명확하게 구분하고 읽기 쉽게 만들기 위해 "-" 같은 특수 문자를 사용
+        // 구분자가 없을경우 ID와 과목이름이 직접 연결되기에, 데이터 중복 및 오류발생 가능성이 있음.
+        String key = studentId + "-" + subject;
+
+        // 해당 회차에 이미 점수가 없는지 확인
+        if (!scoreMap.containsKey(key)) {
+            System.out.println("해당 과목은 미등록 상태입니다.");
+            return;
+        }
+
+        // 해당 회차에 이미 점수가 없는지 확인
+        if (!scoreMap.get(key).containsKey(attempt)) {
+            System.out.println("이미 해당 회차는 미등록 상태입니다.");
+            return;
+        }
+
+        // subject(과목)과 score(점수)를 기반으로 등급을 계산
+        String grade = calculateGrade(subject, score);
+
+        // key가 scoreMap에 없을 경우, 빈 맵(new HashMap<>)을 추가합니다.
+        // key가 scoreMap에 있을 경우, 맵에는 저장 하지 않는다.
+        // NullPointerException 방지하기 위해서 선언.
+        // 자바 초기화를 하지 않으면, 무조건 Null 이다.
+        // HashMap 같은 객체와 같은 타입은 선언이 없을시 null 이다.
+        // scoreMap.putIfAbsent(key, new HashMap<>()); 에서 에러가 없어야,
+        // scoreMap.get(key).put(attempt, new ScoreEntry(score, grade)); 작동되기 때문이다.
+
+        scoreMap.put(key, new HashMap<>());
+        // 최종 : 맵.put 맵.get -> 잘못 입력(null, 잘못된 값) 방지.
+
+        // key로 scoreMap에서 값을 가져온 후, 해당 맵에 attempt(회차)에 대해 ScoreEntry 객체를 추가
+        // ScoreEntry는 점수와 등급을 저장하는 객체
+        scoreMap.get(key).put(attempt, new ScoreEntry(score, grade));
+    }
+
+    // 모든 수강 과목에 점수 추가
+    private static void editScoresForSubject() {
+        System.out.print("수강생 ID를 입력하세요: ");
+        String studentId = sc.next();
+
+        List<String> subjects = Subject.getStudentSubjects(studentId);
+
+        if (subjects == null || subjects.isEmpty()) {
+            System.out.println("등록된 수강 과목이 없습니다.");
+            return;
+        }
+
+        System.out.print("수강중인 과목 목록: ");
+        for (int i = 0; i < subjects.size()-1; i++) {
+            System.out.print("[" + (i + 1) + ". " + subjects.get(i) + "], ");
+        }
+        System.out.println("[" + (subjects.size()) + ". " + subjects.get(subjects.size()-1) + "]");
+
+        int subjectSize = 0;
+        String subjectToEdit;
+
+        while(true) {
+            System.out.print("수정하고 싶은 과목의 번호를 입력하세요: ");
+            int editSubjectsIndex = sc.nextInt();
+            // 입력한 번호가 1이상이고 리스트 크기 이하인지 확인
+            if (editSubjectsIndex >= 1 && editSubjectsIndex <= subjects.size()) {
+                //번호에 따른 과목을 가져옴
+                subjectToEdit = subjects.get(editSubjectsIndex - 1);
+                break;
+            }// 번호가 맞는 번호인지 확인 아니라면 목록에 추가
+            else {
+                System.out.println("올바른 번호를 입력하세요.");
+            }
+        }
+        String key = studentId + "-" + subjectToEdit;
+
+        int attempt = -1;
+
+        if(scoreMap.containsKey(key)) {
+            while (true) { // 회차 입력이 유효할 때까지 반복
+                System.out.print("회차를 입력하세요 (1~10): ");
+                attempt = sc.nextInt();
+
+                if (attempt < 1 || attempt > 10) {
+                    System.out.println("회차는 1~10 사이여야 합니다. 다시 입력하세요.");
+                } else {
+                    boolean attemptcheck = false;
+
+                    if (scoreMap.containsKey(key) && (!scoreMap.get(key).containsKey(attempt))) {
+                        System.out.println("해당 회차는 점수 미등록 상태입니다.");
+                        attemptcheck = true;
+                    }
+
+                    if (!attemptcheck) {
+                        break; // 유효한 회차 입력이 확인된 경우
+                    }
+                }
+            }
+        }
+        else{
+            System.out.println("등록되지 않은 과목입니다.");
+        }
+
+        // 유효한 회차 입력 후 점수 추가
+        while (true) { // 점수가 유효할 때까지 반복
+            String category = getCategory(subjectToEdit);
+            System.out.print(category + " " + subjectToEdit + "에 대한 점수를 입력하세요 (0~100): ");
+            int score = sc.nextInt();
+
+            if (score < 0 || score > 100) {
+                System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다. 다시 입력하세요.");
+            } else {
+                editScore(studentId, subjectToEdit, attempt, score);
+                System.out.println(category + " " + subjectToEdit + "에 점수가 수정되었습니다.");
+                break; // 유효한 점수 입력 후 루프 종료
+            }
+        }
+    }
+
     // 점수에 따른 등급을 계산
     public static String calculateGrade(String subject, int score) {
         String category = getCategory(subject);
@@ -318,7 +440,7 @@ public class Score {
 
             System.out.println("==================================");
             System.out.println("점수 관리 실행 중...");
-            System.out.println("1. 과목별 시험 회차 및 점수 등록");
+            System.out.println("1. 시험 회차 별 점수 등록");
             System.out.println("2. 과목별 회차 점수 수정");
             System.out.println("3. 전체 회차별 점수 및 등급 조회");
             System.out.println("4. 특정 과목 회차별 등급을 조회");
@@ -333,7 +455,7 @@ public class Score {
                         add_Subjects_Score(); // 모든 수강 과목에 점수 추가
                         break;
                     case 2:
-                        //editScoresForSubject(); // 회차별 점수 수정
+                        editScoresForSubject(); // 회차별 점수 수정
                         break;
                     case 3:
                         listAllScores(); // 전체 회차별 점수 및 등급 조회
