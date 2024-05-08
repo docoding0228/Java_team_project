@@ -13,6 +13,21 @@ public class Subject {
 
     private static Scanner sc = new Scanner(System.in);
 
+
+    // ================ 수강생 삭제로 인한 추가 ================
+
+    // 수강생 과목 정보 삭제
+    public static boolean deleteStudentSubjects(String studentId) {
+        if (studentSubjects.containsKey(studentId)) {
+            studentSubjects.remove(studentId); // 학생 ID의 과목 목록 삭제
+            return true; // 삭제 성공
+        } else {
+            return false; // 해당 ID에 대한 과목 정보 없음
+        }
+    }
+    // ================ 수강생 삭제로 인한 추가 ================
+
+
     // 수강생 과목 추가
     public static void manageSubjects() throws InterruptedException {
         String studentId = Student.pushID();
