@@ -486,6 +486,28 @@ public class Score {
     }
 
 
+    public static void listAllScoreByCondition(){
+        Student studentChackMap = new Student();
+        Map<String, Map<String, Student.Condition>> map = studentChackMap.getStudentMap();
+        System.out.print("수강생 ID를 입력하세요: ");
+        String studentId = sc.next();
+
+        if (map.containsKey(studentId)) {
+            System.out.println( "정상작동");
+            switch ()
+                case1:
+                        break;
+            case2:
+
+        }
+        else {
+            System.out.println("해당 ID는 등록되지 않았습니다.");
+        }
+    }
+
+
+
+
     // 점수 관리 메뉴
     public static void displayScoreView() throws InterruptedException {
         boolean running = true;
@@ -502,7 +524,8 @@ public class Score {
             System.out.println("2. 과목별 회차 점수 수정");
             System.out.println("3. 전체 회차별 점수 및 등급 조회");
             System.out.println("4. 특정 과목 회차별 등급을 조회 및 평균 점수");
-            System.out.println("5. 메인 화면 이동");
+            System.out.println("5. 특정 상태 수강생들의 필수 과목 평균 등급");
+            System.out.println("6. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요: ");
 
             try {
@@ -521,7 +544,10 @@ public class Score {
                     case 4:
                         listAllScoresBySubject();
                         break;
-                    case 5:
+                    case 5 :
+                        listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
+                        break;
+                    case 6:
                         running = false; // 메인 화면 이동
                         break;
                     default:

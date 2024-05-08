@@ -9,6 +9,9 @@ public class Student {
 
     // 수강생 ID와 이름을 저장하는 Map
     public static Map<String, Map<String,Condition>> studentMap = new HashMap<>();
+    public static Map<String, Map<String, Student.Condition>> getStudentMap() {
+        return studentMap;
+    }
 
     public static class Condition {
         private final String conditionName;
@@ -56,6 +59,7 @@ public class Student {
                     System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName + ", 선택한 과목명 : " + Subject.getStudentSubjects(id));
                 });
             });
+
         }
 
     }
@@ -137,3 +141,5 @@ public class Student {
         return studentId;
     }
 }
+
+
