@@ -93,8 +93,6 @@ public class Student {
 
     // ================ 수강생 삭제로 인한 추가 ================
 
-
-
     public static void displayStudentView() throws InterruptedException {
         boolean running = true;
         while (running) {
