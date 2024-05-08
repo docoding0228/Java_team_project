@@ -9,9 +9,9 @@ public class Student {
     // 수강생 ID와 이름을 저장하는 Map
     public static Map<String, Map<String,Condition>> studentMap = new HashMap<>();
 
-
     private static final List<String> Conditions = Arrays.asList("Green","Yellow","Red");
-static class Condition {
+
+    static class Condition {
         private String conditionName;
 
         public Condition() {}
@@ -106,6 +106,7 @@ static class Condition {
         });
 
         // 학생 이름을 사용하여 ID 가져오기 및 출력하기
+        System.out.println("컨디션이 " + conditionName + " 인 학생 목록입니다.");
         for (String studentName : conditionCheck) {
             String studentId = getStudentId(studentName);
             System.out.println("학생 ID: " + studentId + ", 이름: " + studentName);
@@ -170,7 +171,8 @@ static class Condition {
             System.out.println("5. 수강생 과목 추가");
             System.out.println("6. 수강생 과목 수정");
             System.out.println("7. 수강생 과목 조회");
-            System.out.println("8. 메인 화면 이동");
+            System.out.println("8. 상태별 수강생 조회");
+            System.out.println("9. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요... ");
 
             int choice = sc.nextInt();
@@ -182,8 +184,9 @@ static class Condition {
                 case 4 -> Student.listStudents();  // 수강생 목록 조회
                 case 5 -> Subject.manageSubjects(); // 수강생 과목 추가
                 case 6 -> Subject.subjectEdit();  //수강생 과목 수정
-                case 7 -> Subject.subjectCheck();//수강생 과목 조회\
-                case 8 -> running = false; // 메인 화면으로 돌아가기
+                case 7 -> Subject.subjectCheck();//수강생 과목 조회
+                case 8 -> Student.conditionList();//상태별 수강생 조회
+                case 9 -> running = false; // 메인 화면으로 돌아가기
                 default -> {
                     System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
                     running = false;
