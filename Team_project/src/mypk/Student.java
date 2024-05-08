@@ -3,6 +3,7 @@ package mypk;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Student {
     private static Scanner sc = new Scanner(System.in);
@@ -11,13 +12,28 @@ public class Student {
     public static Map<String, Map<String,Condition>> studentMap = new HashMap<>();
 
     public static class Condition {
-        private final String conditionName;
+        private String conditionName;
 
-        public Condition(String conditionName) {
-            this.conditionName = conditionName;
+        public Condition() {}
+
+        // 컨디션 정보 가져오기
+        public void setExistingCondition(String conditionName) {this.conditionName=conditionName;};
+
+        // 컨디션을 입력 받아서 넣기
+        public void setCondition(){
+            while(true) {
+                System.out.println("상태정보를 입력해주세요 (Green, Yellow, Red) : ");
+                String tempNewCondition = sc.next();
+                if(tempNewCondition.equals("Green") || tempNewCondition.equals("Yellow") || tempNewCondition.equals("Red")) {
+                    this.conditionName = tempNewCondition;
+                    break;
+                }else{
+                    System.out.println("상태정보를 정확하게 입력해주세요.");
+                }
+            }
         }
 
-        public String getConditionName() {return conditionName;}
+        public String getConditionName() {return this.conditionName;}
     }
 
     public static void registerStudent() {
@@ -30,10 +46,8 @@ public class Student {
             System.out.print("수강생 이름을 입력하세요: ");
             String studentName = sc.next(); // 수강생 이름 입력
 
-            System.out.println("수강생 컨디션을 입력하세요(Green, Yellow, Red) : ");
-            String conditionName = sc.next();
-
-            Condition condition = new Condition(conditionName);
+            Condition condition = new Condition();
+            condition.setCondition();
             studentMap.put(studentId, new HashMap<>());
             studentMap.get(studentId).put(studentName, condition);
 
@@ -53,7 +67,7 @@ public class Student {
             System.out.println("등록된 수강생 목록:");
             studentMap.forEach((id, studentInfoMap) -> {
                 studentInfoMap.forEach((studentName, condition) ->{
-                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName + ", 선택한 과목명 : " + Subject.getStudentSubjects(id));
+                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName + ", 수강중인 과목명 : " + Subject.getStudentSubjects(id));
                 });
             });
         }
@@ -102,24 +116,25 @@ public class Student {
             System.out.println("수강생 관리 실행 중...");
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 정보 수정");
-            System.out.println("2. 수강생 삭제");
-            System.out.println("3. 수강생 목록 조회");
-            System.out.println("4. 수강생 과목 추가");
-            System.out.println("5. 수강생 과목 수정");
-            System.out.println("6. 수강생 과목 조회");
-            System.out.println("7. 메인 화면 이동");
+            System.out.println("3. 수강생 삭제");
+            System.out.println("4. 수강생 목록 조회");
+            System.out.println("5. 수강생 과목 추가");
+            System.out.println("6. 수강생 과목 수정");
+            System.out.println("7. 수강생 과목 조회");
+            System.out.println("8. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요... ");
 
             int choice = sc.nextInt();
 
             switch (choice) {
                 case 1 -> Student.registerStudent(); // 수강생 등록
-                case 2 -> Student.editStudentNameStatus();
-                case 2 -> Student.listStudents();  // 수강생 목록 조회
-                case 3 -> Subject.manageSubjects(); // 수강생 과목 추가
-                case 4 -> Subject.subjectCheck();//수강생 과목 조회
-                case 5 -> Subject.subjectEdit();  //수강생 과목 수정
-                case 6 -> running = false; // 메인 화면으로 돌아가기
+                case 2 -> Student.editStudentNameStatus(); // 수강생 정보 수정
+                case 3 -> System.out.println("삭제하기는 아직 미구현된 기능입니다.");
+                case 4 -> Student.listStudents();  // 수강생 목록 조회
+                case 5 -> Subject.manageSubjects(); // 수강생 과목 추가
+                case 6 -> Subject.subjectEdit();  //수강생 과목 수정
+                case 7 -> Subject.subjectCheck();//수강생 과목 조회\
+                case 8 -> running = false; // 메인 화면으로 돌아가기
                 default -> {
                     System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
                     running = false;
@@ -150,15 +165,30 @@ public class Student {
             System.out.println("1. 수강생 이름 수정");
             System.out.println("2. 수강생 상태 수정");
             System.out.println("3. 이전으로 돌아가기");
-             int choice = sc.nextInt();
+            System.out.print("관리 항목을 선택하세요... ");
+            int choice = sc.nextInt();
             if(choice == 1) {
+                Condition tempCondition = new Condition();
+                Set<String> keys = studentMap.get(studentId).keySet();
+                for (String key : keys) {
+                    tempCondition = new Condition();
+                    tempCondition.setExistingCondition(studentMap.get(studentId).get(key).getConditionName());
+                }
+
                 System.out.print("새로운 이름을 입력하세요: ");
-                String studentName = sc.next();
-                studentMap.put(studentId, studentName);
-                System.out.println("수강생 이름 수정 성공!");
-                System.out.println("수강생 고유번호: " + studentId + ", 이름: " + studentName);
+                String studentNewName = sc.next();
+                // 이름 및 상태를 저장 할 임시 맵 생성  > 이렇게 안하면 계속해서 사용자가 복사됨
+                Map<String, Condition> tempMap = new HashMap<>();
+                tempMap.put(studentNewName, tempCondition);
+                studentMap.put(studentId, tempMap);
+
+                System.out.println("수강생 이름이 수정되었습니다.");
             } else if(choice == 2) {
-                System.out.println("수정");
+                Set<String> keys = studentMap.get(studentId).keySet();
+                for (String key : keys) {
+                    studentMap.get(studentId).get(key).setCondition();
+                }
+                System.out.println("수강생 상태가 수정되었습니다.");
             } else{
                 System.out.println("이전 화면으로 돌아갑니다.");
             }
