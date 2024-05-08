@@ -8,7 +8,17 @@ public class Student {
     private static Scanner sc = new Scanner(System.in);
 
     // 수강생 ID와 이름을 저장하는 Map
-    public static Map<String, String> studentMap = new HashMap<>();
+    public static Map<String, Map<String,Condition>> studentMap = new HashMap<>();
+
+    public static class Condition {
+        private final String conditionName;
+
+        public Condition(String conditionName) {
+            this.conditionName = conditionName;
+        }
+
+        public String getConditionName() {return conditionName;}
+    }
 
     public static void registerStudent() {
         String studentId = pushID();
@@ -20,12 +30,19 @@ public class Student {
             System.out.print("수강생 이름을 입력하세요: ");
             String studentName = sc.next(); // 수강생 이름 입력
 
+            System.out.println("수강생 컨디션을 입력하세요(Green, Yellow, Red) : ");
+            String conditionName = sc.next();
+
+            Condition condition = new Condition(conditionName);
+            studentMap.put(studentId, new HashMap<>());
+            studentMap.get(studentId).put(studentName, condition);
+
             // 수강생 등록
-            studentMap.put(studentId, studentName);
+            //studentMap.put(studentId, studentName);
 
             // 등록 성공 메시지
             System.out.println("수강생 등록 성공!");
-            System.out.println("수강생 고유번호: " + studentId + ", 이름: " + studentName);
+            System.out.println("수강생 고유번호: " + studentId + ", 이름: " + studentName + ", 상태: " + condition.getConditionName());
         }
     }
 
@@ -34,9 +51,24 @@ public class Student {
             System.out.println("등록된 수강생이 없습니다.");
         } else {
             System.out.println("등록된 수강생 목록:");
-            studentMap.forEach((id, name) -> System.out.println("ID: " + id + ", 이름: " + name));
+            studentMap.forEach((id, studentInfoMap) -> {
+                studentInfoMap.forEach((studentName, condition) ->{
+                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName + ", 선택한 과목명 : " + Subject.getStudentSubjects(id));
+                });
+            });
         }
 
+    }
+
+    public static void conditionList() {
+        if (studentMap.isEmpty()) {
+            System.out.println("등록된 수강생이 없습니다.");
+        } else {
+            System.out.println("조회할 상태를 입력하세요.");
+            String conditionName = sc.next();
+
+
+        }
     }
 
     public static void displayStudentView() throws InterruptedException {
