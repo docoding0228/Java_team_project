@@ -13,7 +13,6 @@ public class Subject {
 
     private static Scanner sc = new Scanner(System.in);
 
-
     // ================ 수강생 삭제로 인한 추가 ================
 
     // 수강생 과목 정보 삭제
