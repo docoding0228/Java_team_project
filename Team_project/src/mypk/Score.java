@@ -264,6 +264,26 @@ public class Score {
         }
     }
 
+    // ================ 수강생 삭제로 인한 추가 ================
+
+    public static boolean deleteStudentScores(String studentId) {
+        List<String> keyRemove = new ArrayList<>();
+
+        // scoreMap에서 studentId가 포함된 키를 모두 찾는다.
+        for (String key : scoreMap.keySet()) {
+
+            // studentId + "-" 하는 이유 : 현재 scoreMap 의 형태는,
+            if (key.startsWith(studentId + "-")) {
+                keyRemove.add(key);
+            }
+        }
+        // 찾아낸 키를 scoreMap에서 삭제한다.
+        for (String key : keyRemove) {
+            scoreMap.remove(key);
+        }
+        return !keyRemove.isEmpty(); // 삭제한 키가 있으면 true, 없으면 false
+    }
+    // ================ 수강생 삭제로 인한 추가 ================
     // 점수에 따른 등급을 계산
     public static String calculateGrade(String subject, int score) {
         String category = getCategory(subject);
@@ -440,7 +460,7 @@ public class Score {
 
             System.out.println("==================================");
             System.out.println("점수 관리 실행 중...");
-            System.out.println("1. 시험 회차 별 점수 등록");
+            System.out.println("1. 과목별 시험 회차 및 점수 등록");
             System.out.println("2. 과목별 회차 점수 수정");
             System.out.println("3. 전체 회차별 점수 및 등급 조회");
             System.out.println("4. 특정 과목 회차별 등급을 조회");
@@ -455,7 +475,7 @@ public class Score {
                         add_Subjects_Score(); // 모든 수강 과목에 점수 추가
                         break;
                     case 2:
-                        editScoresForSubject(); // 회차별 점수 수정
+                        //editScoresForSubject(); // 회차별 점수 수정
                         break;
                     case 3:
                         listAllScores(); // 전체 회차별 점수 및 등급 조회
