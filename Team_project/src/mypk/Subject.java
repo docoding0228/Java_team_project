@@ -85,7 +85,7 @@ public class Subject {
         }
 
         // 선택과목 추가
-       System.out.print("필수 과목 목록: ");
+       System.out.print("선택 과목 목록: ");
         for (int i = 0; i < ELECTIVE_SUBJECTS.size() - 1; i++) {
             System.out.print("[" + (i + 1) + ". " + ELECTIVE_SUBJECTS.get(i) + "], ");
         }
