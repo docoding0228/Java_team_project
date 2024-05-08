@@ -19,7 +19,7 @@ public class Student {
 
         public String getConditionName() {return conditionName;}
     }
-    
+
     public static void registerStudent() {
         String studentId = pushID();
 
@@ -59,15 +59,6 @@ public class Student {
         }
 
     }
-
-//    public static void conditionList() {
-//        if (studentMap.isEmpty()) {
-//            System.out.println("등록된 수강생이 없습니다.");
-//        } else {
-//            System.out.println("조회할 상태를 입력하세요.");
-//            String conditionName = sc.next();
-//        }
-//    }
 
     // ================ 수강생 삭제로 인한 추가 ================
     // 수강생 정보 삭제 및 관련 기록 삭제
