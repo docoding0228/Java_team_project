@@ -1,9 +1,8 @@
 package mypk;
-
 import java.util.*;
 
-public class Student {
-    private static Scanner sc = new Scanner(System.in);
+public static class Student {
+    static Scanner sc = new Scanner(System.in);
 
     // 수강생 ID와 이름을 저장하는 Map
     public static Map<String, Map<String,Condition>> studentMap = new HashMap<>();
@@ -13,11 +12,8 @@ public class Student {
 
     private static final List<String> Conditions = Arrays.asList("Green","Yellow","Red");
 
-    static class Condition {
+    public static class Condition {
         private String conditionName;
-        //    public Condition(String conditionName) {
-        //            this.conditionName = conditionName;
-        //        }
 
         public Condition() {}
 
@@ -60,7 +56,7 @@ public class Student {
             System.out.println("수강생 컨디션을 입력하세요(Green, Yellow, Red) : ");
             String conditionName = sc.next();
 
-            Condition condition = new Condition(conditionName);
+            Condition condition = new Condition();
             studentMap.put(studentId, new HashMap<>());
             studentMap.get(studentId).put(studentName, condition);
 
@@ -161,8 +157,13 @@ public class Student {
         for (String studentName : conditionCheck) {
             String studentId = getStudentId(studentName);
             System.out.println("학생 ID: " + studentId + ", 이름: " + studentName);
+
         }
+
     }
+
+    // 상태별 수강생 목록을 조회하기
+
 
     // 학생 이름으로부터 ID를 가져오는 메서드
     public static String getStudentId(String studentName) {
@@ -208,41 +209,25 @@ public class Student {
 
     // ================ 수강생 삭제로 인한 추가 ================
 
-
-
-    public static void displayStudentView(List<String> subjectlist)
-            throws InterruptedException {
-        boolean running = true;
-        while (running) {
+    public static void displayStudentView() throws InterruptedException {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
             System.out.println("1. 수강생 등록");
-            System.out.println("2. 수강생 정보 수정");
-            System.out.println("3. 수강생 삭제");
-            System.out.println("4. 수강생 목록 조회");
-            System.out.println("5. 수강생 과목 추가");
-            System.out.println("6. 수강생 과목 수정");
-            System.out.println("7. 수강생 과목 조회");
-            System.out.println("8. 상태별 수강생 조회");
-            System.out.println("9. 메인 화면 이동");
+            System.out.println("2. 수강생 수정 및 삭제");
+            System.out.println("3. 수강생 과목 등록");
+            System.out.println("4. 수강생 과목 수정");
+            System.out.println("5. 이전으로 돌아가기");
             System.out.print("관리 항목을 선택하세요... ");
 
             int choice = sc.nextInt();
 
             switch (choice) {
                 case 1 -> Student.registerStudent(); // 수강생 등록
-                case 2 -> Student.editStudentNameStatus(); // 수강생 정보 수정
-                case 3 -> System.out.println("삭제하기는 아직 미구현된 기능입니다.");
-                case 4 -> Student.listStudents(subjectlist);  // 수강생 목록 조회
-                case 5 -> Subject.manageSubjects(); // 수강생 과목 추가
-                case 6 -> Subject.subjectEdit();  //수강생 과목 수정
-                case 7 -> Subject.subjectCheck();//수강생 과목 조회
-                case 8 -> Student.conditionList();//상태별 수강생 조회
-                case 9 -> running = false; // 메인 화면으로 돌아가기
-                default -> {
-                    System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
-                    running = false;
-                }
+                case 2 -> Student.editStudent(); // 수강생 정보 수정
+                case 3 -> Subject.manageSubjects();
+                case 4 -> Subject.subjectEdit();
+                case 5 -> System.out.println(" 이전 화면으로 돌아갑니다." );
+                default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
             }
         }
     }
@@ -251,6 +236,81 @@ public class Student {
         return studentMap.containsKey(studentId); // 등록 여부 확인
     }
 
+    public static String pushID() throws NumberFormatException{
+        try {
+
+            System.out.print("수강생 ID를 입력하세요 (001~999): ");
+
+            String studentId = sc.next();
+            if(studentId.length() != 3){
+                throw new Exception("수강생 ID는 001~999 사이의 3자리 숫자로 입력해주세요.");
+            }
+            if (Integer.parseInt(studentId) <= 999 && Integer.parseInt(studentId) >= 001) {
+                return studentId;
+            } else{
+                System.out.println("수강생 ID는 001~999 사이의 숫자로 입력해주세요.");
+                return pushID();
+            }
+        }catch(NumberFormatException e) {
+            System.out.println("수강생 ID는 001~999 사이의 숫자로 입력해주세요.");
+            return pushID();
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+            return pushID();
+        }
+    }
+
+    public static void searchAll()
+    {
+        {
+            System.out.println("통합 조회 화면입니다. 조회하고 싶은 내용을 선택하세요.");
+            System.out.println("1. 전체 수강생 조회");
+            System.out.println("2. 수강생 과목 조회");
+            System.out.println("3. 전체 점수 조회");
+            System.out.println("4. 과목별 평균 점수 조회");
+            System.out.println("5. 상태별 수강생 조회");
+            System.out.println("6. 이전으로 돌아가기");
+            System.out.print(" 관리 항목을 선택하세요... ");
+
+            // 상태별 수강생 조회
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> Student.listStudents();
+                case 2 -> Subject.subjectCheck();
+                case 3 -> Score.listAllScores();
+                case 4 -> Score.listAllScoresBySubject();
+                case 5 -> Student.conditionList();
+                case 6 -> System.out.println(" 이전 화면으로 돌아갑니다.");
+                default -> {
+                    System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
+                }
+            }
+        }
+    }
+
+    // ===================== 수강생 이름 수정 =================================
+
+    public static void editStudentName(String studentId) {
+        if (!studentMap.containsKey(studentId)) {
+            System.out.println("존재하지 않는 ID 입니다.");
+            return;
+        }
+
+        // 수강생 이름 수정
+        Condition tempCondition = new Condition();
+        Set<String> keys = studentMap.get(studentId).keySet();
+        for (String key : keys) {
+            tempCondition.setExistingCondition(studentMap.get(studentId).get(key).getConditionName());
+        }
+        System.out.print("현재 입력된 이름은: " + " 입니다. ");
+        System.out.print("새로운 이름을 입력하세요: ");
+        String studentNewName = sc.next();
+        Map<String, Condition> tempMap = new HashMap<>();
+        tempMap.put(studentNewName, tempCondition);
+        studentMap.put(studentId, tempMap);
+
+        System.out.println("수강생 이름이 수정되었습니다.");
     public static String pushID() throws NumberFormatException{
         try {
             System.out.print("수강생 ID를 입력하세요 (001~999): ");
@@ -273,7 +333,6 @@ public class Student {
         }
     }
 
-    // 학생의 이름, 상태 정보를 입력받아 수정한다.
     public static void editStudentNameStatus(){
         String studentId = pushID();
 
@@ -314,6 +373,53 @@ public class Student {
             }
         }
     }
-}
 
+    // ===================== 수강생 이름 수정 =================================
+
+
+    public static void editStudentCondition(String studentId) {
+        if (!studentMap.containsKey(studentId)) {
+            System.out.println("존재하지 않는 ID 입니다.");
+            return;
+        }
+
+        // 수강생 상태 수정
+        for (String key : studentMap.get(studentId).keySet()) {
+            studentMap.get(studentId).get(key).setCondition();
+        }
+        System.out.println("수강생 상태가 수정되었습니다.");
+    }
+
+    public static void editStudent() {
+        String studentId = pushID();
+
+        if (!studentMap.containsKey(studentId)) {
+            System.out.println("존재하지 않는 ID 입니다.");
+            return;
+        }
+
+        boolean running = true;
+        while (running) {
+            System.out.println("수정하고 싶은 내용을 선택하세요.");
+            System.out.println("1. 수강생 이름 수정");
+            System.out.println("2. 수강생 상태 수정");
+            System.out.println("3. 수강생 삭제");
+            System.out.println("4. 이전으로 돌아가기");
+            System.out.print(" 관리 항목을 선택하세요... ");
+
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> editStudentName(studentId);
+                case 2 -> editStudentCondition(studentId);
+                case 3 -> deleteStudent();
+                case 4 -> running = false;
+                default -> {
+                    System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
+                    running = false;
+                }
+            }
+        }
+    }
+}
 

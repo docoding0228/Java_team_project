@@ -16,20 +16,17 @@ public class Main {
             System.out.println("내일배움캠프 수강생 관리 프로그램 실행 중...");
             System.out.println("1. 수강생 관리");
             System.out.println("2. 점수 관리");
-            System.out.println("3. 프로그램 종료");
+            System.out.println("3. 통합 조회 ");
+            System.out.println("4. 프로그램 종료");
             System.out.print("관리 항목을 선택하세요... ");
 
             int choice = sc.nextInt();
 
             switch (choice) {
-                    case 1 -> {
-                        // 필수 및 선택 과목 정보를 가져옴
-                        List<String> subjectlist = Subject.getAllSubjects(); // 전체 과목 리스트도 가져옴
-                        // displayStudentView 메서드에 필수 및 선택 과목 정보 전달
-                        Student.displayStudentView(subjectlist);
-                    }
-                case 2 -> Score.displayScoreView();
-                case 3 -> running = false; // 점수 관리
+                case 1 -> Student.displayStudentView(); // 수강생 관리
+                case 2 -> Score.displayScoreView(); // 점수 관리
+                case 3 -> Student.searchAll();
+                case 4 -> running = false;
                 default -> {
                     System.out.println("잘못된 입력입니다. 2초 후 되돌아갑니다.");
                     Thread.sleep(2000);

@@ -9,7 +9,6 @@ public class Score {
 
     // 학생의 수강 과목을 키로 하고, 회차별 점수와 등급을 값으로 가지는 맵
     private static final Map<String, Map<Integer, ScoreEntry>> scoreMap = new HashMap<>();
-
     // String : 학생 ID와 과목
     // Integer : 회차
     // ScoreEntry : 점수와 등급
@@ -26,13 +25,8 @@ public class Score {
         }
 
         // 점수와 등급을 반환 getScore, getGrade
-        public int getScore() {
-            return score;
-        }
-
-        public String getGrade() {
-            return grade;
-        }
+        public int getScore() { return score; }
+        public String getGrade() { return grade; }
     }
 
     // 특정 학생의 특정 과목에 대해 특정 회차의 점수를 추가하는 역할
@@ -96,7 +90,8 @@ public class Score {
 
     // 모든 수강 과목에 점수 추가
     private static void add_Subjects_Score() {
-        String studentId = pushID();
+        System.out.print("수강생 ID를 입력하세요: ");
+        String studentId = sc.next();
 
         List<String> subjects = Subject.getStudentSubjects(studentId);
 
@@ -490,51 +485,26 @@ public class Score {
 
     // 점수 관리 메뉴
     public static void displayScoreView() throws InterruptedException {
-        boolean running = true;
-        while (running) {
-            System.out.print("점수 관리를 실행하시겠습니까? (YES/NO): ");
-            String answer = sc.next();
-            if ("no".equalsIgnoreCase(answer)) {
-                break;
+
+        System.out.println("==================================");
+        System.out.println("점수 관리 실행 중...");
+        System.out.println("1. 점수 등록");
+        System.out.println("2. 점수 수정");
+        System.out.println("3. 이전으로 돌아가기");
+        System.out.print("관리 항목을 선택하세요: ");
+
+        try {
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> add_Subjects_Score(); // 모든 수강 과목에 점수 추가
+                case 2 -> editScoresForSubject(); // 회차별 점수 수정
+                case 3 -> System.out.println("이전 화면으로 돌아갑니다.");
+                default -> System.out.println("잘못된 입력입니다.");
             }
-
-            System.out.println("==================================");
-            System.out.println("점수 관리 실행 중...");
-            System.out.println("1. 시험 회차 별 점수 등록");
-            System.out.println("2. 과목별 회차 점수 수정");
-            System.out.println("3. 전체 회차별 점수 및 등급 조회");
-            System.out.println("4. 특정 과목 회차별 등급을 조회 및 평균 점수");
-            System.out.println("5. 특정 상태 수강생들의 필수 과목 평균 등급");
-            System.out.println("6. 메인 화면 이동");
-            System.out.print("관리 항목을 선택하세요: ");
-
-            try {
-                int choice = sc.nextInt();
-
-                switch (choice) {
-                    case 1:
-                        add_Subjects_Score(); // 모든 수강 과목에 점수 추가
-                        break;
-                    case 2:
-                        editScoresForSubject(); // 회차별 점수 수정
-                        break;
-                    case 3:
-                        listAllScores(); // 전체 회차별 점수 및 등급 조회
-                        break;
-                    case 4:
-                        listAllScoresBySubject();
-                        break;
-
-                    case 6:
-                        running = false; // 메인 화면 이동
-                        break;
-                    default:
-                        System.out.println("잘못된 입력입니다.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
-                sc.nextLine(); // 잘못된 입력을 버퍼에서 제거
-            }
+        } catch (InputMismatchException e) {
+            System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
+            sc.nextLine(); // 잘못된 입력을 버퍼에서 제거
         }
     }
 }
