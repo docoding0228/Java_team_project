@@ -484,24 +484,24 @@ public class Score {
     }
 
 
-    public static void listAllScoreByCondition(){
-        Student studentChackMap = new Student();
-        Map<String, Map<String, Student.Condition>> map = studentChackMap.getStudentMap();
-        System.out.print("수강생 ID를 입력하세요: ");
-        String studentId = sc.next();
-
-        if (map.containsKey(studentId)) {
-            System.out.println( "정상작동");
-            switch ()
-                case1:
-                        break;
-            case2:
-
-        }
-        else {
-            System.out.println("해당 ID는 등록되지 않았습니다.");
-        }
-    }
+//    public static void listAllScoreByCondition(){
+//        Student studentChackMap = new Student();
+//        Map<String, Map<String, Student.Condition>> map = studentChackMap.getStudentMap();
+//        System.out.print("수강생 ID를 입력하세요: ");
+//        String studentId = sc.next();
+//
+//        if (map.containsKey(studentId)) {
+//            System.out.println( "정상작동");
+//            switch ()
+//                case1:
+//                        break;
+//            case2:
+//
+//        }
+//        else {
+//            System.out.println("해당 ID는 등록되지 않았습니다.");
+//        }
+//    }
 
 
 
@@ -543,7 +543,7 @@ public class Score {
                         listAllScoresBySubject();
                         break;
                     case 5 :
-                        listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
+                        //listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
                         break;
                     case 6:
                         running = false; // 메인 화면 이동
