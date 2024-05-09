@@ -482,24 +482,6 @@ public class Score {
         }
     }
 
-    public static void listAllScoreByCondition(){
-        Student studentChackMap = new Student();
-        Map<String, Map<String, Student.Condition>> map = studentChackMap.getStudentMap();
-        System.out.print("수강생 ID를 입력하세요: ");
-        String studentId = sc.next();
-
-//        if (map.containsKey(studentId)) {
-//            System.out.println( "정상작동");
-//            switch ()
-//            case1: break;
-//            case2:
-//
-//        }
-//        else {
-//            System.out.println("해당 ID는 등록되지 않았습니다.");
-//        }
-    }
-
     // 점수 관리 메뉴
     public static void displayScoreView() throws InterruptedException {
         boolean running = true;
