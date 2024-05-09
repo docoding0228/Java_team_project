@@ -15,9 +15,9 @@ public class Student {
 
     static class Condition {
         private String conditionName;
-        //    public Condition(String conditionName) {
-        //            this.conditionName = conditionName;
-        //        }
+        public Condition(String conditionName) {
+            this.conditionName = conditionName;
+        }
 
         public Condition() {}
 
@@ -77,7 +77,7 @@ public class Student {
                     System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName );
                     // 해당 수강생의 과목 목록을 가져옴
                     List<String> studentSubjects = Subject.getStudentSubjects(id);
-// 필수 과목 출력
+                    // 필수 과목 출력
                     System.out.print("필수 과목: ");
                     List<String> requiredSubjects = studentSubjects.stream()
                             .filter(subject -> Subject.getRequiredSubjects().contains(subject))
@@ -95,7 +95,7 @@ public class Student {
                         System.out.println("]");
                     }
 
-// 선택 과목 출력
+                    // 선택 과목 출력
                     System.out.print("선택 과목: ");
                     List<String> electiveSubjects = studentSubjects.stream()
                             .filter(subject -> Subject.getElectiveSubjects().contains(subject))
