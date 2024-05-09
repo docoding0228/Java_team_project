@@ -56,9 +56,43 @@ public class Student {
             studentMap.forEach((id, studentInfoMap) -> {
                 studentInfoMap.forEach((studentName, condition) ->{
                     System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName );
-                    System.out.println("필수 과목: " + subjectlist.stream().filter(Subject.getRequiredSubjects()::contains).toList());
-                    System.out.println("선택 과목: " + subjectlist.stream().filter(Subject.getElectiveSubjects()::contains).toList());
+                    // 해당 수강생의 과목 목록을 가져옴
+                    List<String> studentSubjects = Subject.getStudentSubjects(id);
+// 필수 과목 출력
+                    System.out.print("필수 과목: ");
+                    List<String> requiredSubjects = studentSubjects.stream()
+                            .filter(subject -> Subject.getRequiredSubjects().contains(subject))
+                            .toList();
+                    if (requiredSubjects.isEmpty()) {
+                        System.out.println("[]");
+                    } else {
+                        System.out.print("[");
+                        for (int i = 0; i < requiredSubjects.size(); i++) {
+                            System.out.print(requiredSubjects.get(i));
+                            if (i != requiredSubjects.size() - 1) {
+                                System.out.print(", ");
+                            }
+                        }
+                        System.out.println("]");
+                    }
 
+// 선택 과목 출력
+                    System.out.print("선택 과목: ");
+                    List<String> electiveSubjects = studentSubjects.stream()
+                            .filter(subject -> Subject.getElectiveSubjects().contains(subject))
+                            .toList();
+                    if (electiveSubjects.isEmpty()) {
+                        System.out.println("[]");
+                    } else {
+                        System.out.print("[");
+                        for (int i = 0; i < electiveSubjects.size(); i++) {
+                            System.out.print(electiveSubjects.get(i));
+                            if (i != electiveSubjects.size() - 1) {
+                                System.out.print(", ");
+                            }
+                        }
+                        System.out.println("]");
+                    }
                 });
             });
 

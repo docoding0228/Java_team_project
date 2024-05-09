@@ -21,8 +21,6 @@ public class Main {
             switch (choice) {
                     case 1 -> {
                         // 필수 및 선택 과목 정보를 가져옴
-                        List<String> requiredSubjects = Subject.getRequiredSubjects();
-                        List<String> electiveSubjects = Subject.getElectiveSubjects();
                         List<String> subjectlist = Subject.getAllSubjects(); // 전체 과목 리스트도 가져옴
                         // displayStudentView 메서드에 필수 및 선택 과목 정보 전달
                         Student.displayStudentView(subjectlist);
