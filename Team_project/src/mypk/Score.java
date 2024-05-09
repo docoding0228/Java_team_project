@@ -27,7 +27,7 @@ public class Score {
             System.out.println("1. 과목별 시험 회차 및 점수 등록");
             System.out.println("2. 과목별 회차 점수 수정");
             System.out.println("3. 특정 상태 수강생들의 필수 과목 평균 등급");
-
+            System.out.println("4. 이전으로 돌아가기");
             System.out.print("관리 항목을 선택하세요: ");
             try {
                 int choice = sc.nextInt();
@@ -42,6 +42,9 @@ public class Score {
                     case 3 :
                         System.out.println("아직 미구현 기능입니다.");
 //                      listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
+                        break;
+                    case 4 :
+                        System.out.println("이전 화면으로 돌아갑니다.");
                         break;
                     default:
                         System.out.println("잘못된 입력입니다.");
@@ -59,13 +62,14 @@ public class Score {
             System.out.println("수강생 정보 조회 중...");
             System.out.println("1. 전체 점수 조회");
             System.out.println("2. 특정 과목 회차 점수 조회");
-
+            System.out.println("3. 이전으로 돌아가기");
             System.out.print("관리 항목을 선택하세요: ");
             int choice = sc.nextInt();
 
             switch (choice) {
                 case 1 -> listAllScores();
                 case 2 -> listAllScoresBySubject();
+                case 3 -> System.out.println("이전 화면으로 돌아갑니다.");
             }
 
     }

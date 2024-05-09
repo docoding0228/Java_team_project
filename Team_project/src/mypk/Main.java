@@ -5,7 +5,7 @@ public class Main {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws InterruptedException {
-        displayMainView(); // 메인 루프 실행
+        displayMainView();
     }
 
     public static void displayMainView() throws InterruptedException {
@@ -22,10 +22,10 @@ public class Main {
             int choice = sc.nextInt();
 
             switch (choice) {
-                case 1 -> Student.displayStudentView(); // 수강생 관리
+                case 1 -> Student.displayStudentView();
                 case 2 -> Score.displayScoreView();
-                case 3 -> Check.Check(); //각종 조회
-                case 4 -> running = false; // 점수 관리
+                case 3 -> Check.Check();
+                case 4 -> running = false;
                 default -> {
                     System.out.println("잘못된 입력입니다. 2초 후 되돌아갑니다.");
                     Thread.sleep(2000);

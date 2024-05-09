@@ -149,21 +149,20 @@ public class Student {
             System.out.println("1. 수강생 등록");
             System.out.println("2. 수강생 수정 및 삭제");
             System.out.println("3. 수강생 과목 관리");
-            System.out.println("4. 메인 화면 이동");
+            System.out.println("4. 이전으로 돌아가기");
             System.out.print("관리 항목을 선택하세요... ");
 
             int choice = sc.nextInt();
 
             switch (choice) {
-                case 1 -> Student.registerStudent(); // 수강생 등록
-                case 2 -> Student.retouchStudentView(); // 수강생 정보 수정 페이지
-                case 3 -> Subject.settingSubjectView(); // 수강생 과목 관리 페이지
-                case 4 -> Main.displayMainView();
+                case 1 -> Student.registerStudent();
+                case 2 -> Student.retouchStudentView();
+                case 3 -> Subject.settingSubjectView();
+                case 4 -> System.out.println("이전 화면으로 돌아갑니다.");
                 default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
              }
     }
-//    2. 수강생 수정 및 조회
-//    System.out.println("3. 수강생 삭제"); case 3 -> System.out.println("삭제하기는 아직 미구현된 기능입니다.");
+
 public static void retouchStudentView() throws InterruptedException {
         System.out.println("==================================");
         System.out.println("수강생 수정 중...");
@@ -175,13 +174,12 @@ public static void retouchStudentView() throws InterruptedException {
         int choice = sc.nextInt();
 
         switch (choice) {
-            case 1 -> Student.deleteStudent(); // 수강생 정보 삭제
-            case 2 -> Student.editStudentNameStatus(); // 수강생 정보 수정
-            case 3 -> Student.displayStudentView(); // 이전 화면
+            case 1 -> Student.deleteStudent(pushID());
+            case 2 -> Student.editStudentNameStatus();
+            case 3 -> Student.displayStudentView();
             default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
         }
 }
-    }
 
 
     public static void editStudentName(String studentId) {
@@ -202,6 +200,9 @@ public static void retouchStudentView() throws InterruptedException {
         studentMap.put(studentId, tempMap);
 
         System.out.println("수강생 이름이 수정되었습니다.");
+    }
+    public static boolean isRegistered(String studentId) {
+        return studentMap.containsKey(studentId);
     }
 
     public static String pushID() throws NumberFormatException{
@@ -305,7 +306,6 @@ public static void retouchStudentView() throws InterruptedException {
 
             }
         }
-
     }
 }
 

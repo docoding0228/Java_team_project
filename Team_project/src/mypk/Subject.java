@@ -29,9 +29,9 @@ public class Subject {
             int choice = sc.nextInt();
 
             switch (choice) {
-                case 1 -> Subject.manageSubjects();  //수강생 과목 추가
-                case 2 -> Subject.subjectEdit(); // 수강생 과목 수정
-                case 3 -> Student.displayStudentView();//이전 화면 이동
+                case 1 -> Subject.manageSubjects();
+                case 2 -> Subject.subjectEdit();
+                case 3 -> Student.displayStudentView();
                 default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
             }
     }
