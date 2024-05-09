@@ -2,7 +2,6 @@ package mypk;
 
 import java.util.*;
 
-
 public class Student {
     private static Scanner sc = new Scanner(System.in);
 
@@ -16,6 +15,9 @@ public class Student {
 
     static class Condition {
         private String conditionName;
+        //    public Condition(String conditionName) {
+        //            this.conditionName = conditionName;
+        //        }
 
         public Condition() {}
 
@@ -42,8 +44,7 @@ public class Student {
             }
         }
 
-        public String getConditionName() {return this.conditionName;}
-
+        public String getConditionName() {return conditionName;}
     }
 
     public static void registerStudent() {
@@ -55,8 +56,11 @@ public class Student {
         } else {
             System.out.print("수강생 이름을 입력하세요: ");
             String studentName = sc.next(); // 수강생 이름 입력
-            Condition condition = new Condition();
-            condition.setCondition();
+
+            System.out.println("수강생 컨디션을 입력하세요(Green, Yellow, Red) : ");
+            String conditionName = sc.next();
+
+            Condition condition = new Condition(conditionName);
             studentMap.put(studentId, new HashMap<>());
             studentMap.get(studentId).put(studentName, condition);
 
@@ -69,14 +73,51 @@ public class Student {
         }
     }
 
-    public static void listStudents() {
+    public static void listStudents(List<String> subjectlist) {
         if (studentMap.isEmpty()) {
             System.out.println("등록된 수강생이 없습니다.");
         } else {
             System.out.println("등록된 수강생 목록:");
             studentMap.forEach((id, studentInfoMap) -> {
                 studentInfoMap.forEach((studentName, condition) ->{
-                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName + ", 수강중인 과목명 : " + Subject.getStudentSubjects(id));
+                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName );
+                    // 해당 수강생의 과목 목록을 가져옴
+                    List<String> studentSubjects = Subject.getStudentSubjects(id);
+// 필수 과목 출력
+                    System.out.print("필수 과목: ");
+                    List<String> requiredSubjects = studentSubjects.stream()
+                            .filter(subject -> Subject.getRequiredSubjects().contains(subject))
+                            .toList();
+                    if (requiredSubjects.isEmpty()) {
+                        System.out.println("[]");
+                    } else {
+                        System.out.print("[");
+                        for (int i = 0; i < requiredSubjects.size(); i++) {
+                            System.out.print(requiredSubjects.get(i));
+                            if (i != requiredSubjects.size() - 1) {
+                                System.out.print(", ");
+                            }
+                        }
+                        System.out.println("]");
+                    }
+
+// 선택 과목 출력
+                    System.out.print("선택 과목: ");
+                    List<String> electiveSubjects = studentSubjects.stream()
+                            .filter(subject -> Subject.getElectiveSubjects().contains(subject))
+                            .toList();
+                    if (electiveSubjects.isEmpty()) {
+                        System.out.println("[]");
+                    } else {
+                        System.out.print("[");
+                        for (int i = 0; i < electiveSubjects.size(); i++) {
+                            System.out.print(electiveSubjects.get(i));
+                            if (i != electiveSubjects.size() - 1) {
+                                System.out.print(", ");
+                            }
+                        }
+                        System.out.println("]");
+                    }
                 });
             });
 
@@ -169,7 +210,8 @@ public class Student {
 
 
 
-    public static void displayStudentView() throws InterruptedException {
+    public static void displayStudentView(List<String> subjectlist)
+            throws InterruptedException {
         boolean running = true;
         while (running) {
             System.out.println("==================================");
@@ -191,7 +233,7 @@ public class Student {
                 case 1 -> Student.registerStudent(); // 수강생 등록
                 case 2 -> Student.editStudentNameStatus(); // 수강생 정보 수정
                 case 3 -> System.out.println("삭제하기는 아직 미구현된 기능입니다.");
-                case 4 -> Student.listStudents();  // 수강생 목록 조회
+                case 4 -> Student.listStudents(subjectlist);  // 수강생 목록 조회
                 case 5 -> Subject.manageSubjects(); // 수강생 과목 추가
                 case 6 -> Subject.subjectEdit();  //수강생 과목 수정
                 case 7 -> Subject.subjectCheck();//수강생 과목 조회

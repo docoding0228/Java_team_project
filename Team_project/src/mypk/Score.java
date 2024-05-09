@@ -9,6 +9,7 @@ public class Score {
 
     // 학생의 수강 과목을 키로 하고, 회차별 점수와 등급을 값으로 가지는 맵
     private static final Map<String, Map<Integer, ScoreEntry>> scoreMap = new HashMap<>();
+
     // String : 학생 ID와 과목
     // Integer : 회차
     // ScoreEntry : 점수와 등급
@@ -148,6 +149,27 @@ public class Score {
         }
     }
 
+    // ================ 수강생 삭제로 인한 추가 ================
+
+    public static boolean deleteStudentScores(String studentId) {
+        List<String> keyRemove = new ArrayList<>();
+
+        // scoreMap에서 studentId가 포함된 키를 모두 찾는다.
+        for (String key : scoreMap.keySet()) {
+
+            // studentId + "-" 하는 이유 : 현재 scoreMap 의 형태는,
+            if (key.startsWith(studentId + "-")) {
+                keyRemove.add(key);
+            }
+        }
+        // 찾아낸 키를 scoreMap에서 삭제한다.
+        for (String key : keyRemove) {
+            scoreMap.remove(key);
+        }
+        return !keyRemove.isEmpty(); // 삭제한 키가 있으면 true, 없으면 false
+    }
+    // ================ 수강생 삭제로 인한 추가 ================
+
     // 점수 수정 기능
     public static void editScore(String studentId, String subject, int attempt, int score) {
         if (score < 0 || score > 100) {
@@ -268,26 +290,6 @@ public class Score {
         }
     }
 
-    // ================ 수강생 삭제로 인한 추가 ================
-
-    public static boolean deleteStudentScores(String studentId) {
-        List<String> keyRemove = new ArrayList<>();
-
-        // scoreMap에서 studentId가 포함된 키를 모두 찾는다.
-        for (String key : scoreMap.keySet()) {
-
-            // studentId + "-" 하는 이유 : 현재 scoreMap 의 형태는,
-            if (key.startsWith(studentId + "-")) {
-                keyRemove.add(key);
-            }
-        }
-        // 찾아낸 키를 scoreMap에서 삭제한다.
-        for (String key : keyRemove) {
-            scoreMap.remove(key);
-        }
-        return !keyRemove.isEmpty(); // 삭제한 키가 있으면 true, 없으면 false
-    }
-    // ================ 수강생 삭제로 인한 추가 ================
     // 점수에 따른 등급을 계산
     public static String calculateGrade(String subject, int score) {
         String category = getCategory(subject);
@@ -431,7 +433,7 @@ public class Score {
             String studentId = parts[0];
             String subject = parts[1];
 
-            if (subject.equalsIgnoreCase(subjectToSearch)) {
+            if (subject.equals(subjectToSearch)) {
                 Map<Integer, ScoreEntry> scores = scoreMap.get(key);
                 found = true; // 조회된 결과가 있다고 표시
 
@@ -484,26 +486,6 @@ public class Score {
     }
 
 
-    public static void listAllScoreByCondition(){
-//        Student studentChackMap = new Student();
-//        Map<String, Map<String, Student.Condition>> map = studentChackMap.getStudentMap();
-//        System.out.print("수강생 ID를 입력하세요: ");
-//        String studentId = sc.next();
-//
-//        if (map.containsKey(studentId)) {
-//            System.out.println( "정상작동");
-//            switch ()
-//                case1:
-//                        break;
-//            case2:
-//
-//        }
-//        else {
-//            System.out.println("해당 ID는 등록되지 않았습니다.");
-//        }
-    }
-
-
 
 
     // 점수 관리 메뉴
@@ -518,7 +500,7 @@ public class Score {
 
             System.out.println("==================================");
             System.out.println("점수 관리 실행 중...");
-            System.out.println("1. 과목별 시험 회차 및 점수 등록");
+            System.out.println("1. 시험 회차 별 점수 등록");
             System.out.println("2. 과목별 회차 점수 수정");
             System.out.println("3. 전체 회차별 점수 및 등급 조회");
             System.out.println("4. 특정 과목 회차별 등급을 조회 및 평균 점수");
@@ -534,7 +516,7 @@ public class Score {
                         add_Subjects_Score(); // 모든 수강 과목에 점수 추가
                         break;
                     case 2:
-                        //editScoresForSubject(); // 회차별 점수 수정
+                        editScoresForSubject(); // 회차별 점수 수정
                         break;
                     case 3:
                         listAllScores(); // 전체 회차별 점수 및 등급 조회
@@ -542,10 +524,7 @@ public class Score {
                     case 4:
                         listAllScoresBySubject();
                         break;
-                    case 5 :
-                        System.out.println("아직 미구현 기능입니다.");
-//                        listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
-                        break;
+
                     case 6:
                         running = false; // 메인 화면 이동
                         break;
