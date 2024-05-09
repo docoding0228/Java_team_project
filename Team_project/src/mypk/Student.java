@@ -1,6 +1,7 @@
 package mypk;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -49,16 +50,22 @@ public class Student {
         }
     }
 
-    public static void listStudents() {
+    public static void listStudents(List<String> subjectlist) {
         if (studentMap.isEmpty()) {
             System.out.println("등록된 수강생이 없습니다.");
         } else {
             System.out.println("등록된 수강생 목록:");
             studentMap.forEach((id, studentInfoMap) -> {
                 studentInfoMap.forEach((studentName, condition) ->{
-                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName + ", 선택한 과목명 : " + Subject.getStudentSubjects(id));
+                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName );
+                    List<String> requiredSubjects = Subject.getRequiredSubjects();
+                    List<String> electiveSubjects = Subject.getElectiveSubjects();
+                    System.out.println("필수 과목: " + subjectlist.stream().filter(Subject.getRequiredSubjects()::contains).toList());
+                    System.out.println("선택 과목: " + subjectlist.stream().filter(Subject.getElectiveSubjects()::contains).toList());
+
                 });
             });
+
 
         }
 
@@ -99,7 +106,8 @@ public class Student {
 
 
 
-    public static void displayStudentView() throws InterruptedException {
+    public static void displayStudentView(List<String> requiredSubjects, List<String> electiveSubjects, List<String> subjectlist)
+            throws InterruptedException {
         boolean running = true;
         while (running) {
             System.out.println("==================================");
@@ -118,10 +126,10 @@ public class Student {
             switch (choice) {
                 case 1 -> Student.registerStudent(); // 수강생 등록
                 case 2 -> Student.deleteStudent(); // 수강생 삭제
-                case 3 -> Student.listStudents(); // 수강생 목록 조회
+                case 3 -> Student.listStudents(subjectlist); // 수강생 목록 조회
                 case 4 -> Subject.manageSubjects(); // 수강생 과목 추가
-                case 5 -> Subject.subjectEdit(); // 수강생 과목 조회
-                case 6 -> Subject.subjectCheck(); // 수강색 과목 수정
+                case 5 -> Subject.subjectEdit(); // 수강생 과목 수정
+                case 6 -> Subject.subjectCheck(); // 수강생 과목 조회
                 case 7 -> running = false; // 메인 화면으로 돌아가기
                 default -> {
                     System.out.println("잘못된 입력입니다.");

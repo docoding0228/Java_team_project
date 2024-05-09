@@ -13,6 +13,12 @@ public class Subject {
 
     private static Scanner sc = new Scanner(System.in);
 
+    public static List<String> getAllSubjects() {
+        List<String> allSubjects = new ArrayList<>(REQUIRED_SUBJECTS);
+        allSubjects.addAll(ELECTIVE_SUBJECTS);
+        return allSubjects;
+    }
+
     // ================ 수강생 삭제로 인한 추가 ================
 
     // 수강생 과목 정보 삭제
@@ -174,7 +180,9 @@ public class Subject {
             System.out.println("수강생 ID: " + studentId);//ID출력
             List<String> subjectlist = studentSubjects.get(studentId);
             if (subjectlist != null) {
-                System.out.println("수강 과목: " + subjectlist);
+                System.out.println("[수강 과목]" );
+                System.out.println("필수 과목: " + subjectlist.stream().filter(REQUIRED_SUBJECTS::contains).toList());
+                System.out.println("선택 과목: " + subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).toList());
             } else {
                 System.out.println("등록된 과목이 없습니다.");
             }
@@ -233,6 +241,8 @@ public class Subject {
                         if (!subjectlist.contains(newSubject)) {
                             subjectlist.add(newSubject);
                             System.out.println("과목이 추가되었습니다.");
+                            System.out.println("필수 과목: " + subjectlist.stream().filter(REQUIRED_SUBJECTS::contains).toList());
+                            System.out.println("선택 과목: " + subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).toList());
                             break;
                         } else {
                             System.out.println("이미 선택한 과목입니다.");
@@ -249,6 +259,8 @@ public class Subject {
                     if (subjectIndex >= 1 && subjectIndex <= subjectlist.size()) {
                         subjectlist.remove(subjectIndex - 1);
                         System.out.println("과목이 삭제되었습니다.");
+                        System.out.println("필수 과목: " + subjectlist.stream().filter(REQUIRED_SUBJECTS::contains).toList());
+                        System.out.println("선택 과목: " + subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).toList());
                         break;
                     } else {
                         System.out.println("잘못된 선택입니다.");
