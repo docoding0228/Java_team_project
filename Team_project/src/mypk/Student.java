@@ -10,9 +10,7 @@ public class Student {
 
     // 수강생 ID와 이름을 저장하는 Map
     public static Map<String, Map<String,Condition>> studentMap = new HashMap<>();
-    public static Map<String, Map<String, Student.Condition>> getStudentMap() {
-        return studentMap;
-    }
+
 
     public static class Condition {
         private final String conditionName;
@@ -58,8 +56,6 @@ public class Student {
             studentMap.forEach((id, studentInfoMap) -> {
                 studentInfoMap.forEach((studentName, condition) ->{
                     System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName );
-                    List<String> requiredSubjects = Subject.getRequiredSubjects();
-                    List<String> electiveSubjects = Subject.getElectiveSubjects();
                     System.out.println("필수 과목: " + subjectlist.stream().filter(Subject.getRequiredSubjects()::contains).toList());
                     System.out.println("선택 과목: " + subjectlist.stream().filter(Subject.getElectiveSubjects()::contains).toList());
 
@@ -106,7 +102,7 @@ public class Student {
 
 
 
-    public static void displayStudentView(List<String> requiredSubjects, List<String> electiveSubjects, List<String> subjectlist)
+    public static void displayStudentView(List<String> subjectlist)
             throws InterruptedException {
         boolean running = true;
         while (running) {
