@@ -27,7 +27,7 @@ public class Student {
             while(true) {
                 System.out.println("상태정보를 입력해주세요 (Green, Yellow, Red) : ");
                 String tempNewCondition = sc.next();
-                if(tempNewCondition.equals("Green") || tempNewCondition.equals("Yellow") || tempNewCondition.equals("Red")) {
+                if(tempNewCondition.equalsIgnoreCase("Green") || tempNewCondition.equalsIgnoreCase("Yellow") || tempNewCondition.equalsIgnoreCase("Red")) {
                     this.conditionName = tempNewCondition;
                     break;
                 }else{
