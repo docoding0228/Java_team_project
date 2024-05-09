@@ -484,41 +484,26 @@ public class Score {
 
     // 점수 관리 메뉴
     public static void displayScoreView() throws InterruptedException {
-        boolean running = true;
-        while (running) {
-            System.out.print("점수 관리를 실행하시겠습니까? (YES/NO): ");
-            String answer = sc.next();
-            if ("no".equalsIgnoreCase(answer)) {
-                break;
+
+        System.out.println("==================================");
+        System.out.println("점수 관리 실행 중...");
+        System.out.println("1. 점수 등록");
+        System.out.println("2. 점수 수정");
+        System.out.println("3. 이전으로 돌아가기");
+        System.out.print("관리 항목을 선택하세요: ");
+
+        try {
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> add_Subjects_Score(); // 모든 수강 과목에 점수 추가
+                case 2 -> editScoresForSubject(); // 회차별 점수 수정
+                case 3 -> System.out.println("이전 화면으로 돌아갑니다.");
+                default -> System.out.println("잘못된 입력입니다.");
             }
-
-            System.out.println("==================================");
-            System.out.println("점수 관리 실행 중...");
-            System.out.println("1. 점수 등록");
-            System.out.println("2. 점수 수정");
-            System.out.println("3. 이전으로 돌아가기");
-            System.out.print("관리 항목을 선택하세요: ");
-
-            try {
-                int choice = sc.nextInt();
-
-                switch (choice) {
-                    case 1:
-                        add_Subjects_Score(); // 모든 수강 과목에 점수 추가
-                        break;
-                    case 2:
-                        editScoresForSubject(); // 회차별 점수 수정
-                        break;
-                    case 3:
-                        running = false; // 메인 화면 이동
-                        break;
-                    default:
-                        System.out.println("잘못된 입력입니다.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
-                sc.nextLine(); // 잘못된 입력을 버퍼에서 제거
-            }
+        } catch (InputMismatchException e) {
+            System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
+            sc.nextLine(); // 잘못된 입력을 버퍼에서 제거
         }
     }
 }

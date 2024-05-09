@@ -177,7 +177,7 @@ public class Student {
                 case 2 -> Student.editStudent();
                 case 3 -> Subject.manageSubjects();
                 case 4 -> Subject.subjectEdit();
-                case 5 -> System.out.println(" 이전화면으로 돌아갑니다." );
+                case 5 -> System.out.println(" 이전 화면으로 돌아갑니다." );
                 default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
             }
         }
@@ -195,8 +195,7 @@ public class Student {
 
     public static void searchAll()
     {
-        boolean running = true;
-        while (running) {
+        {
             System.out.println("통합 조회 화면입니다. 조회하고 싶은 내용을 선택하세요.");
             System.out.println("1. 전체 수강생 조회");
             System.out.println("2. 수강생 과목 조회");
@@ -211,12 +210,13 @@ public class Student {
 
             switch (choice) {
                 case 1 -> Student.listStudents();
-                case 2 -> Student.conditionList();
-                case 3 -> Subject.subjectCheck();
-                case 4 -> running = false;
+                case 2 -> Subject.subjectCheck();
+                case 3 -> Score.listAllScores();
+                case 4 -> Score.listAllScoresBySubject();
+                case 5 -> Student.conditionList();
+                case 6 -> System.out.println(" 이전 화면으로 돌아갑니다.");
                 default -> {
                     System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
-                    running = false;
                 }
             }
         }
