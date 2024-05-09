@@ -3,46 +3,55 @@ import java.util.*;
 
 
 
-public static class Student {
+public class Student {
     private static Scanner sc = new Scanner(System.in);
 
     // 수강생 ID와 이름을 저장하는 Map
-    public static Map<String, Map<String,Condition>> studentMap = new HashMap<>();
+    public static Map<String, Map<String, Condition>> studentMap = new HashMap<>();
+
     public static Map<String, Map<String, Student.Condition>> getStudentMap() {
         return studentMap;
     }
 
-    private static final List<String> Conditions = Arrays.asList("Green","Yellow","Red");
+    private static final List<String> Conditions = Arrays.asList("Green", "Yellow", "Red");
 
     public static class Condition {
         private String conditionName;
 
-        public Condition() {}
+        public Condition() {
+        }
 
         // 컨디션 정보 가져오기
-        public void setExistingCondition(String conditionName) {this.conditionName=conditionName;};
+        public void setExistingCondition(String conditionName) {
+            this.conditionName = conditionName;
+        }
+
+        ;
 
         // 컨디션을 입력 받아서 넣기
-        public void setCondition(){
-            while(true) {
+        public void setCondition() {
+            while (true) {
                 System.out.print("상태정보를 입력해주세요 (Green, Yellow, Red) : ");
                 String tempNewCondition = sc.next();
-                if(tempNewCondition.equalsIgnoreCase("Green")){
+
+                if (tempNewCondition.equalsIgnoreCase("Green")) {
                     this.conditionName = "Green";
                     break;
-                }else if(tempNewCondition.equalsIgnoreCase("Yellow")){
+                } else if (tempNewCondition.equalsIgnoreCase("Yellow")) {
                     this.conditionName = "Yellow";
                     break;
-                }else if(tempNewCondition.equalsIgnoreCase("Red")){
+                } else if (tempNewCondition.equalsIgnoreCase("Red")) {
                     this.conditionName = "Red";
                     break;
-                } else{
+                } else {
                     System.out.println("상태정보를 정확하게 입력해주세요.");
                 }
             }
         }
 
-        public String getConditionName() {return conditionName;}
+        public String getConditionName() {
+            return conditionName;
+        }
     }
 
     public static void registerStudent() {
@@ -55,10 +64,11 @@ public static class Student {
             System.out.print("수강생 이름을 입력하세요: ");
             String studentName = sc.next(); // 수강생 이름 입력
 
-            System.out.println("수강생 컨디션을 입력하세요(Green, Yellow, Red) : ");
-            String conditionName = sc.next();
-
+//            System.out.println("수강생 컨디션을 입력하세요(Green, Yellow, Red) : ");
+//            String conditionName = sc.next();
+//
             Condition condition = new Condition();
+            condition.setCondition();
             studentMap.put(studentId, new HashMap<>());
             studentMap.get(studentId).put(studentName, condition);
 
@@ -77,45 +87,8 @@ public static class Student {
         } else {
             System.out.println("등록된 수강생 목록:");
             studentMap.forEach((id, studentInfoMap) -> {
-                studentInfoMap.forEach((studentName, condition) ->{
-                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName );
-                    // 해당 수강생의 과목 목록을 가져옴
-                    List<String> studentSubjects = Subject.getStudentSubjects(id);
-// 필수 과목 출력
-                    System.out.print("필수 과목: ");
-                    List<String> requiredSubjects = studentSubjects.stream()
-                            .filter(subject -> Subject.getRequiredSubjects().contains(subject))
-                            .toList();
-                    if (requiredSubjects.isEmpty()) {
-                        System.out.println("[]");
-                    } else {
-                        System.out.print("[");
-                        for (int i = 0; i < requiredSubjects.size(); i++) {
-                            System.out.print(requiredSubjects.get(i));
-                            if (i != requiredSubjects.size() - 1) {
-                                System.out.print(", ");
-                            }
-                        }
-                        System.out.println("]");
-                    }
-
-// 선택 과목 출력
-                    System.out.print("선택 과목: ");
-                    List<String> electiveSubjects = studentSubjects.stream()
-                            .filter(subject -> Subject.getElectiveSubjects().contains(subject))
-                            .toList();
-                    if (electiveSubjects.isEmpty()) {
-                        System.out.println("[]");
-                    } else {
-                        System.out.print("[");
-                        for (int i = 0; i < electiveSubjects.size(); i++) {
-                            System.out.print(electiveSubjects.get(i));
-                            if (i != electiveSubjects.size() - 1) {
-                                System.out.print(", ");
-                            }
-                        }
-                        System.out.println("]");
-                    }
+                studentInfoMap.forEach((studentName, condition) -> {
+                    System.out.println("ID : " + id + ", 이름 : " + studentName + ", 상태 : " + condition.conditionName);
                 });
             });
 
@@ -193,73 +166,34 @@ public static class Student {
         // 학생 정보 삭제
         studentMap.remove(studentId); // 학생 ID 제거
         System.out.println("수강생 ID " + studentId + "이 삭제되었습니다.");
-
-        // 수강생의 과목 정보도 삭제
-        if (Subject.deleteStudentSubjects(studentId)) {
-            System.out.println("해당 수강생의 과목 정보가 함께 삭제되었습니다.");
-        } else {
-            System.out.println("해당 수강생의 과목 정보는 없습니다.");
-        }
-
-        // 수강생의 점수 기록도 삭제
-        if (Score.deleteStudentScores(studentId)) {
-            System.out.println("해당 수강생의 점수 기록이 함께 삭제되었습니다.");
-        } else {
-            System.out.println("해당 수강생의 점수 기록은 없습니다.");
-        }
     }
 
     // ================ 수강생 삭제로 인한 추가 ================
 
     public static void displayStudentView() throws InterruptedException {
-            System.out.println("==================================");
-            System.out.println("수강생 관리 실행 중...");
-            System.out.println("1. 수강생 등록");
-            System.out.println("2. 수강생 수정 및 삭제");
-            System.out.println("3. 수강생 과목 등록");
-            System.out.println("4. 수강생 과목 수정");
-            System.out.println("5. 이전으로 돌아가기");
-            System.out.print("관리 항목을 선택하세요... ");
+        System.out.println("==================================");
+        System.out.println("수강생 관리 실행 중...");
+        System.out.println("1. 수강생 등록");
+        System.out.println("2. 수강생 수정 및 삭제");
+        System.out.println("3. 수강생 과목 등록");
+        System.out.println("4. 수강생 과목 수정");
+        System.out.println("5. 이전으로 돌아가기");
+        System.out.print("관리 항목을 선택하세요... ");
 
-            int choice = sc.nextInt();
+        int choice = sc.nextInt();
 
-            switch (choice) {
-                case 1 -> Student.registerStudent(); // 수강생 등록
-                case 2 -> Student.editStudent(); // 수강생 정보 수정
-                case 3 -> Subject.manageSubjects();
-                case 4 -> Subject.subjectEdit();
-                case 5 -> System.out.println(" 이전 화면으로 돌아갑니다." );
-                default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
-            }
+        switch (choice) {
+            case 1 -> Student.registerStudent(); // 수강생 등록
+            case 2 -> Student.editStudent(); // 수강생 정보 수정
+            case 3 -> Subject.manageSubjects();
+            case 4 -> Subject.subjectEdit();
+            case 5 -> System.out.println(" 이전 화면으로 돌아갑니다." );
+            default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
         }
     }
 
     public static boolean isRegistered(String studentId) {
         return studentMap.containsKey(studentId); // 등록 여부 확인
-    }
-
-    public static String pushID() throws NumberFormatException{
-        try {
-
-            System.out.print("수강생 ID를 입력하세요 (001~999): ");
-
-            String studentId = sc.next();
-            if(studentId.length() != 3){
-                throw new Exception("수강생 ID는 001~999 사이의 3자리 숫자로 입력해주세요.");
-            }
-            if (Integer.parseInt(studentId) <= 999 && Integer.parseInt(studentId) >= 001) {
-                return studentId;
-            } else{
-                System.out.println("수강생 ID는 001~999 사이의 숫자로 입력해주세요.");
-                return pushID();
-            }
-        }catch(NumberFormatException e) {
-            System.out.println("수강생 ID는 001~999 사이의 숫자로 입력해주세요.");
-            return pushID();
-        }catch(Exception ex){
-            System.out.println(ex.getMessage());
-            return pushID();
-        }
     }
 
     public static void searchAll()
@@ -282,7 +216,8 @@ public static class Student {
                 case 2 -> Subject.subjectCheck();
                 case 3 -> Score.listAllScores();
                 case 4 -> Score.listAllScoresBySubject();
-                case 5 -> Student.conditionList();
+//                case 5 -> Student.conditionList();
+                case 5 -> System.out.println("아직 구현중인 기능입니다.");
                 case 6 -> System.out.println(" 이전 화면으로 돌아갑니다.");
                 default -> {
                     System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
@@ -313,6 +248,8 @@ public static class Student {
         studentMap.put(studentId, tempMap);
 
         System.out.println("수강생 이름이 수정되었습니다.");
+    }
+
     public static String pushID() throws NumberFormatException{
         try {
             System.out.print("수강생 ID를 입력하세요 (001~999): ");
@@ -324,7 +261,7 @@ public static class Student {
                 return studentId;
             } else{
                 System.out.println("수강생 ID는 001~999 사이의 숫자로 입력해주세요.");
-                return pushID();
+                Student.pushID();
             }
         }catch(NumberFormatException e) {
             System.out.println("수강생 ID는 001~999 사이의 숫자로 입력해주세요.");
@@ -333,6 +270,7 @@ public static class Student {
             System.out.println(ex.getMessage());
             return pushID();
         }
+        return pushID();
     }
 
     public static void editStudentNameStatus(){

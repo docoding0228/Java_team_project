@@ -67,13 +67,18 @@ public class Subject {
 
         System.out.println("[" + (5) + ". " + REQUIRED_SUBJECTS.get(4) + "]");
 
-        boolean addingRequiredSubjects = true;
         int subjectSize = 0;
+        while (true) {
+            if(subjectlist.size() >= 5) {
+                break;
+            } else if (subjectlist.size() >= 3) {
+                System.out.print("필수 과목을 더 추가하시나요? (YES/NO): ");
+                String answer = sc.next();
+                if ("NO".equalsIgnoreCase(answer)) {
+                    break;
+                }
+            }
 
-        // addingRequiredSubjects 변수가 true인 동안 계속 실행되는 while 루프를 시작
-        // addingRequiredSubjects 변수가 false가 되면 루프가 종료
-
-        while (addingRequiredSubjects) {
             System.out.print("희망하는하는 필수 과목의 번호를 입력하세요: ");
             int requiredSubjectsIndex = sc.nextInt();
             // 입력한 번호가 1이상이고 리스트 크기 이하인지 확인
@@ -91,18 +96,6 @@ public class Subject {
             else {
                 System.out.println("올바른 번호를 입력하세요.");
             }
-
-            // subjectlist 크기가 3 이상인지를 확인하는 조건문
-            if (subjectlist.size() >= 3) {
-                System.out.print("필수 과목을 더 추가하시나요? (YES/NO): ");
-                String answer = sc.next();
-
-                // answer가 "NO"와 같은지, 대소문자를 구분하지 않고 확인
-                if ("NO".equalsIgnoreCase(answer)) {
-                    // 만약 "NO"와 같다면, addingRequiredSubjects 변수를 false로 설정하여 필수 과목 추가 작업을 중단
-                    addingRequiredSubjects = false; // 선택과목으로 넘어가기
-                }
-            }
         }
 
         // 선택과목 추가
@@ -113,6 +106,18 @@ public class Subject {
         System.out.println("[4. " + ELECTIVE_SUBJECTS.get(3) + "]");
 
         while (true) {
+            if(subjectlist.size() >= subjectSize + 4){
+                break;
+            }
+
+            if (subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).count() >= 2) {
+                System.out.print("선택 과목을 더 추가하시나요? (YES/NO): ");
+                String answer = sc.next();
+                if (answer.equalsIgnoreCase("no")) {
+                    break;
+                }
+            }
+
             System.out.print("희망하는 선택 과목의 번호를 입력하세요: ");
             int electiveSubjectsIndex = sc.nextInt();
 
@@ -125,20 +130,6 @@ public class Subject {
                 }
             } else {
                 System.out.println("올바른 번호를 입력하세요.");
-            }
-
-            if(subjectlist.size() >= subjectSize + 4){
-                Score.displayScoreView();
-                break;
-            }
-
-            if (subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).count() >= 2) {
-                System.out.print("선택 과목을 더 추가하시나요? (YES/NO): ");
-                String answer = sc.next();
-                if (answer.equalsIgnoreCase("no")) {
-                    Score.displayScoreView(); //일단 이거를 내일
-                    break;
-                }
             }
         }
 

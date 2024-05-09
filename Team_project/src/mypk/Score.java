@@ -407,14 +407,19 @@ public class Score {
     }
 
     public static void listAllScoresBySubject() {
-        List<String> allSubjects = new ArrayList<>();
-        for (String key : scoreMap.keySet()) {
-            String[] parts = key.split("-"); // 학생 번호와 과목을 분리
-            String subject = parts[1];
-            if (!allSubjects.contains(subject)) {
-                allSubjects.add(subject);
-            }
-        }
+//        List<String> allSubjects = new ArrayList<>();
+//        for (String key : scoreMap.keySet()) {
+//            String[] parts = key.split("-"); // 학생 번호와 과목을 분리
+//            String subject = parts[1];
+//            if (!allSubjects.contains(subject)) {
+//                allSubjects.add(subject);
+//            }
+//        }
+
+        String inputId = pushID();
+        List<String> allSubjects = Subject.getStudentSubjects(inputId);
+
+
         System.out.println("등록된 수강 과목 목록: " + allSubjects);
         // 조회할 과목을 입력받음
         System.out.print("조회할 과목을 입력하세요: ");
