@@ -151,7 +151,7 @@ public class Student {
         }
 
         // 수강생의 점수 기록도 삭제
-        if (my2_team2.Score.deleteStudentScores(studentId)) {
+        if (mypk.Score.deleteStudentScores(studentId)) {
             System.out.println("해당 수강생의 점수 기록이 함께 삭제되었습니다.");
         } else {
             System.out.println("해당 수강생의 점수 기록은 없습니다.");
