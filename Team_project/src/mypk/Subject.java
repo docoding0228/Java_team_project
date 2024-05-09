@@ -1,8 +1,7 @@
 package mypk;
 
-import mypk.Student;
-
 import java.util.*;
+import static mypk.Student.pushID;
 
 public class Subject {
     // 프로그램 실행 중에 값이 변경되지 않는 상수 리스트로, 필수 과목 목록을 미리 정의
@@ -10,7 +9,6 @@ public class Subject {
     private static final List<String> ELECTIVE_SUBJECTS = Arrays.asList("디자인_패턴", "Spring_Security", "Redis", "MongoDB");
 
     private static Map<String, List<String>> studentSubjects = new HashMap<>(); // 학생별 과목 목록
-
     private static Scanner sc = new Scanner(System.in);
 
     // ================ 수강생 삭제로 인한 추가 ================
@@ -29,7 +27,7 @@ public class Subject {
 
     // 수강생 과목 추가
     public static void manageSubjects() throws InterruptedException {
-        String studentId = Student.pushID();
+        String studentId = pushID();
         // 학생 등록 여부 확인
         // studentId가 Student.isRegistered() 메서드에서 false를 반환하는지 확인
         // 수강생 ID가 등록되지 않았음을 의미
@@ -60,13 +58,8 @@ public class Subject {
 
         System.out.println("[" + (5) + ". " + REQUIRED_SUBJECTS.get(4) + "]");
 
-        boolean addingRequiredSubjects = true;
         int subjectSize = 0;
-
-        // addingRequiredSubjects 변수가 true인 동안 계속 실행되는 while 루프를 시작
-        // addingRequiredSubjects 변수가 false가 되면 루프가 종료
-
-        while (addingRequiredSubjects) {
+        while (true) {
             System.out.print("희망하는하는 필수 과목의 번호를 입력하세요: ");
             int requiredSubjectsIndex = sc.nextInt();
             // 입력한 번호가 1이상이고 리스트 크기 이하인지 확인
@@ -91,9 +84,9 @@ public class Subject {
                 String answer = sc.next();
 
                 // answer가 "NO"와 같은지, 대소문자를 구분하지 않고 확인
-                if ("NO".equalsIgnoreCase(answer)) {
+                if (answer.equalsIgnoreCase("no")) {
                     // 만약 "NO"와 같다면, addingRequiredSubjects 변수를 false로 설정하여 필수 과목 추가 작업을 중단
-                    addingRequiredSubjects = false; // 선택과목으로 넘어가기
+                    break; // 선택과목으로 넘어가기
                 }
             }
         }
@@ -128,7 +121,7 @@ public class Subject {
             if (subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).count() >= 2) {
                 System.out.print("선택 과목을 더 추가하시나요? (YES/NO): ");
                 String answer = sc.next();
-                if ("NO".equalsIgnoreCase(answer)) {
+                if (answer.equalsIgnoreCase("no")) {
                     Score.displayScoreView(); //일단 이거를 내일
                     break;
                 }
@@ -149,7 +142,7 @@ public class Subject {
         if (studentSubjects.containsKey(studentId)) {
             return new ArrayList<>(studentSubjects.get(studentId)); // 안전을 위해 복사본 반환
         } else {
-            System.out.println("수강생 ID " + studentId + "에 등록된 수강 과목이 없습니다.");
+//            System.out.println("수강생 ID " + studentId + "에 등록된 수강 과목이 없습니다.");
             return Collections.emptyList(); // 빈 리스트 반환
         }
     }
@@ -168,8 +161,7 @@ public class Subject {
 
     //조회 기능
     public static void subjectCheck() {
-        System.out.println("수강생 ID를 입력해주세요:");
-        String studentId = sc.next();
+        String studentId = pushID();
 
         if (!Student.isRegistered(studentId)) {//등록 확인
             System.out.println("등록되지 않은 학생입니다.");
@@ -186,8 +178,7 @@ public class Subject {
 
     //수정기능
     public static void subjectEdit() {
-        System.out.println("수정할 수강생 ID를 입력해주세요.");
-        String pushId = sc.next();//ID입역
+        String pushId = pushID();
 
         //등록 안되어있는경우
         if (!Student.isRegistered(pushId)) {

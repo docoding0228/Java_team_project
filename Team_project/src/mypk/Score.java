@@ -2,6 +2,8 @@ package mypk;
 
 import java.util.*;
 
+import static mypk.Student.pushID;
+
 public class Score {
     private static final Scanner sc = new Scanner(System.in);
 
@@ -11,7 +13,7 @@ public class Score {
     // Integer : 회차
     // ScoreEntry : 점수와 등급
 
-    // 점수와 등급을 나타내는 클래스
+    // 점수와 등급을 나타내는 클래스  // 이너 클래스
     public static class ScoreEntry {
         private final int score;
         private final String grade;
@@ -93,8 +95,7 @@ public class Score {
 
     // 모든 수강 과목에 점수 추가
     private static void add_Subjects_Score() {
-        System.out.print("수강생 ID를 입력하세요: ");
-        String studentId = sc.next();
+        String studentId = pushID();
 
         List<String> subjects = Subject.getStudentSubjects(studentId);
 
@@ -190,10 +191,9 @@ public class Score {
         scoreMap.get(key).put(attempt, new ScoreEntry(score, grade));
     }
 
-    // 모든 수강 과목에 점수 추가
+    // 모든 수강 과목에 점수 수정
     private static void editScoresForSubject() {
-        System.out.print("수강생 ID를 입력하세요: ");
-        String studentId = sc.next();
+        String studentId = pushID();
 
         List<String> subjects = Subject.getStudentSubjects(studentId);
 

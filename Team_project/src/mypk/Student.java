@@ -25,12 +25,18 @@ public class Student {
         // 컨디션을 입력 받아서 넣기
         public void setCondition(){
             while(true) {
-                System.out.println("상태정보를 입력해주세요 (Green, Yellow, Red) : ");
+                System.out.print("상태정보를 입력해주세요 (Green, Yellow, Red) : ");
                 String tempNewCondition = sc.next();
-                if(tempNewCondition.equalsIgnoreCase("Green") || tempNewCondition.equalsIgnoreCase("Yellow") || tempNewCondition.equalsIgnoreCase("Red")) {
-                    this.conditionName = tempNewCondition;
+                if(tempNewCondition.equalsIgnoreCase("Green")){
+                    this.conditionName = "Green";
                     break;
-                }else{
+                }else if(tempNewCondition.equalsIgnoreCase("Yellow")){
+                    this.conditionName = "Yellow";
+                    break;
+                }else if(tempNewCondition.equalsIgnoreCase("Red")){
+                    this.conditionName = "Red";
+                    break;
+                } else{
                     System.out.println("상태정보를 정확하게 입력해주세요.");
                 }
             }
@@ -203,10 +209,26 @@ public class Student {
         return studentMap.containsKey(studentId); // 등록 여부 확인
     }
 
-    public static String pushID() {
-        System.out.print("수강생 ID를 입력하세요: ");
-        String studentId = sc.next();
-        return studentId;
+    public static String pushID() throws NumberFormatException{
+        try {
+            System.out.print("수강생 ID를 입력하세요 (001~999): ");
+            String studentId = sc.next();
+            if(studentId.length() != 3){
+                throw new Exception("수강생 ID는 001~999 사이의 3자리 숫자로 입력해주세요.");
+            }
+            if (Integer.parseInt(studentId) <= 999 && Integer.parseInt(studentId) >= 001) {
+                return studentId;
+            } else{
+                System.out.println("수강생 ID는 001~999 사이의 숫자로 입력해주세요.");
+                return pushID();
+            }
+        }catch(NumberFormatException e) {
+            System.out.println("수강생 ID는 001~999 사이의 숫자로 입력해주세요.");
+            return pushID();
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+            return pushID();
+        }
     }
 
     // 학생의 이름, 상태 정보를 입력받아 수정한다.
