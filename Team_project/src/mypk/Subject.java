@@ -104,10 +104,8 @@ public class Subject {
             System.out.print("[" + (i + 1) + ". " + ELECTIVE_SUBJECTS.get(i) + "], ");
         }
         System.out.println("[4. " + ELECTIVE_SUBJECTS.get(3) + "]");
-        
-        boolean addingElectiveSubjects = true;
 
-        while (addingElectiveSubjects) {
+        while (true) {
             System.out.print("희망하는 선택 과목의 번호를 입력하세요: ");
             int electiveSubjectsIndex = sc.nextInt();
 
@@ -122,12 +120,17 @@ public class Subject {
                 System.out.println("올바른 번호를 입력하세요.");
             }
 
+            if(subjectlist.size() >= subjectSize + 4){
+                Score.displayScoreView();
+                break;
+            }
+
             if (subjectlist.stream().filter(ELECTIVE_SUBJECTS::contains).count() >= 2) {
                 System.out.print("선택 과목을 더 추가하시나요? (YES/NO): ");
                 String answer = sc.next();
-                if ("NO".equalsIgnoreCase(answer) || subjectlist.size() >= subjectSize + 4) {
+                if ("NO".equalsIgnoreCase(answer)) {
                     Score.displayScoreView(); //일단 이거를 내일
-                    addingElectiveSubjects = false;
+                    break;
                 }
             }
         }

@@ -431,7 +431,7 @@ public class Score {
             String studentId = parts[0];
             String subject = parts[1];
 
-            if (subject.equals(subjectToSearch)) {
+            if (subject.equalsIgnoreCase(subjectToSearch)) {
                 Map<Integer, ScoreEntry> scores = scoreMap.get(key);
                 found = true; // 조회된 결과가 있다고 표시
 
@@ -484,6 +484,7 @@ public class Score {
     }
 
 
+
 //    public static void listAllScoreByCondition(){
 //        Student studentChackMap = new Student();
 //        Map<String, Map<String, Student.Condition>> map = studentChackMap.getStudentMap();
@@ -502,6 +503,7 @@ public class Score {
 //            System.out.println("해당 ID는 등록되지 않았습니다.");
 //        }
 //    }
+
 
 
 
@@ -543,7 +545,9 @@ public class Score {
                         listAllScoresBySubject();
                         break;
                     case 5 :
-                        //listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
+                        System.out.println("아직 미구현 기능입니다.");
+//                        listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
+
                         break;
                     case 6:
                         running = false; // 메인 화면 이동
