@@ -10,7 +10,6 @@ public class Score {
     // String : 학생 ID와 과목
     // Integer : 회차
     // ScoreEntry : 점수와 등급
-
     // 점수와 등급을 나타내는 클래스
     public static class ScoreEntry {
         private final int score;
@@ -30,6 +29,56 @@ public class Score {
         public String getGrade() {
             return grade;
         }
+    }
+
+    public static void displayScoreView() throws InterruptedException {
+
+            System.out.println("==================================");
+            System.out.println("점수 관리 실행 중...");
+            System.out.println("1. 과목별 시험 회차 및 점수 등록");
+            System.out.println("2. 과목별 회차 점수 수정");
+            System.out.println("3. 특정 상태 수강생들의 필수 과목 평균 등급");
+
+            System.out.print("관리 항목을 선택하세요: ");
+            try {
+                int choice = sc.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        add_Subjects_Score(); // 모든 수강 과목에 점수 추가
+                        break;
+                    case 2:
+                        editScoresForSubject(); // 회차별 점수 수정
+                        break;
+                    case 3 :
+                        System.out.println("아직 미구현 기능입니다.");
+//                      listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
+                        break;
+                    default:
+                        System.out.println("잘못된 입력입니다.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
+                sc.nextLine(); // 잘못된 입력을 버퍼에서 제거
+            }
+
+    }
+
+    public static void displayScoreSelect(){
+
+            System.out.println("==================================");
+            System.out.println("수강생 정보 조회 중...");
+            System.out.println("1. 전체 점수 조회");
+            System.out.println("2. 특정 과목 회차 점수 조회");
+
+            System.out.print("관리 항목을 선택하세요: ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> listAllScores();
+                case 2 -> listAllScoresBySubject();
+            }
+
     }
 
     // 특정 학생의 특정 과목에 대해 특정 회차의 점수를 추가하는 역할
@@ -501,61 +550,5 @@ public class Score {
 //        else {
 //            System.out.println("해당 ID는 등록되지 않았습니다.");
 //        }
-    }
-
-
-
-
-    // 점수 관리 메뉴
-    public static void displayScoreView() throws InterruptedException {
-        boolean running = true;
-        while (running) {
-            System.out.print("점수 관리를 실행하시겠습니까? (YES/NO): ");
-            String answer = sc.next();
-            if ("no".equalsIgnoreCase(answer)) {
-                break;
-            }
-
-            System.out.println("==================================");
-            System.out.println("점수 관리 실행 중...");
-            System.out.println("1. 과목별 시험 회차 및 점수 등록");
-            System.out.println("2. 과목별 회차 점수 수정");
-            System.out.println("3. 전체 회차별 점수 및 등급 조회");
-            System.out.println("4. 특정 과목 회차별 등급을 조회 및 평균 점수");
-            System.out.println("5. 특정 상태 수강생들의 필수 과목 평균 등급");
-            System.out.println("6. 메인 화면 이동");
-            System.out.print("관리 항목을 선택하세요: ");
-
-            try {
-                int choice = sc.nextInt();
-
-                switch (choice) {
-                    case 1:
-                        add_Subjects_Score(); // 모든 수강 과목에 점수 추가
-                        break;
-                    case 2:
-                        //editScoresForSubject(); // 회차별 점수 수정
-                        break;
-                    case 3:
-                        listAllScores(); // 전체 회차별 점수 및 등급 조회
-                        break;
-                    case 4:
-                        listAllScoresBySubject();
-                        break;
-                    case 5 :
-                        System.out.println("아직 미구현 기능입니다.");
-//                        listAllScoreByCondition();// 특정 상태 수강생들의 필수과목 평균 등급
-                        break;
-                    case 6:
-                        running = false; // 메인 화면 이동
-                        break;
-                    default:
-                        System.out.println("잘못된 입력입니다.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
-                sc.nextLine(); // 잘못된 입력을 버퍼에서 제거
-            }
-        }
     }
 }

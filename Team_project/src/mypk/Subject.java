@@ -14,6 +14,24 @@ public class Subject {
     private static Scanner sc = new Scanner(System.in);
 
     // ================ 수강생 삭제로 인한 추가 ================
+    public static void settingSubjectView() throws InterruptedException {
+
+            System.out.println("==================================");
+            System.out.println("수강생 과목 관리 실행 중...");
+            System.out.println("1. 수강생 과목 등록");
+            System.out.println("2. 수강생 과목 수정");
+            System.out.println("3. 이전 화면 이동");
+
+            System.out.print("관리 항목을 선택하세요... ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> Subject.manageSubjects();  //수강생 과목 추가
+                case 2 -> Subject.subjectEdit(); // 수강생 과목 수정
+                case 3 -> Student.displayStudentView();//이전 화면 이동
+                default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
+            }
+    }
 
     // 수강생 과목 정보 삭제
     public static boolean deleteStudentSubjects(String studentId) {
@@ -129,7 +147,6 @@ public class Subject {
                 System.out.print("선택 과목을 더 추가하시나요? (YES/NO): ");
                 String answer = sc.next();
                 if ("NO".equalsIgnoreCase(answer)) {
-                    Score.displayScoreView(); //일단 이거를 내일
                     break;
                 }
             }

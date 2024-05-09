@@ -164,40 +164,47 @@ public class Student {
 
 
     public static void displayStudentView() throws InterruptedException {
-        boolean running = true;
-        while (running) {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
             System.out.println("1. 수강생 등록");
-            System.out.println("2. 수강생 정보 수정");
-            System.out.println("3. 수강생 삭제");
-            System.out.println("4. 수강생 목록 조회");
-            System.out.println("5. 수강생 과목 추가");
-            System.out.println("6. 수강생 과목 수정");
-            System.out.println("7. 수강생 과목 조회");
-            System.out.println("8. 상태별 수강생 조회");
-            System.out.println("9. 메인 화면 이동");
+            System.out.println("2. 수강생 수정 및 삭제");
+            System.out.println("3. 수강생 과목 관리");
+            System.out.println("4. 메인 화면 이동");
             System.out.print("관리 항목을 선택하세요... ");
 
             int choice = sc.nextInt();
 
             switch (choice) {
                 case 1 -> Student.registerStudent(); // 수강생 등록
-                case 2 -> Student.editStudentNameStatus(); // 수강생 정보 수정
-                case 3 -> System.out.println("삭제하기는 아직 미구현된 기능입니다.");
-                case 4 -> Student.listStudents();  // 수강생 목록 조회
-                case 5 -> Subject.manageSubjects(); // 수강생 과목 추가
-                case 6 -> Subject.subjectEdit();  //수강생 과목 수정
-                case 7 -> Subject.subjectCheck();//수강생 과목 조회
-                case 8 -> Student.conditionList();//상태별 수강생 조회
-                case 9 -> running = false; // 메인 화면으로 돌아가기
-                default -> {
-                    System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
-                    running = false;
-                }
-            }
-        }
+                case 2 -> Student.retouchStudentView(); // 수강생 정보 수정 페이지
+                case 3 -> Subject.settingSubjectView(); // 수강생 과목 관리 페이지
+                case 4 -> Main.displayMainView();
+                default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
+             }
     }
+//    2. 수강생 수정 및 조회
+//    System.out.println("3. 수강생 삭제"); case 3 -> System.out.println("삭제하기는 아직 미구현된 기능입니다.");
+public static void retouchStudentView() throws InterruptedException {
+        System.out.println("==================================");
+        System.out.println("수강생 수정 중...");
+        System.out.println("1. 수강생 정보 삭제");
+        System.out.println("2. 수강생 정보 수정");
+        System.out.println("3. 이전 화면 이동");
+        System.out.print("관리 항목을 선택하세요... ");
+
+        int choice = sc.nextInt();
+
+        switch (choice) {
+            case 1 -> Student.deleteStudent(); // 수강생 정보 삭제
+            case 2 -> Student.editStudentNameStatus(); // 수강생 정보 수정
+            case 3 -> Student.displayStudentView(); // 이전 화면
+            default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
+        }
+}
+//    3. 수강생 과목 관리
+//    System.out.println("5. 수강생 과목 추가"); case 5 -> Subject.manageSubjects(); // 수강생 과목 추가
+//    System.out.println("6. 수강생 과목 수정"); case 6 -> Subject.subjectEdit();  //수강생 과목 수정
+//    System.out.println("7. 수강생 과목 조회"); case 7 -> Subject.subjectCheck();//수강생 과목 조회
 
     public static boolean isRegistered(String studentId) {
         return studentMap.containsKey(studentId); // 등록 여부 확인
