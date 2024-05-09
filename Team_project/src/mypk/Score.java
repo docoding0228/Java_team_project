@@ -1,5 +1,4 @@
 package mypk;
-
 import java.util.*;
 
 public class Score {
@@ -7,7 +6,6 @@ public class Score {
 
     // 학생의 수강 과목을 키로 하고, 회차별 점수와 등급을 값으로 가지는 맵
     private static final Map<String, Map<Integer, ScoreEntry>> scoreMap = new HashMap<>();
-
     // String : 학생 ID와 과목
     // Integer : 회차
     // ScoreEntry : 점수와 등급
@@ -24,8 +22,13 @@ public class Score {
         }
 
         // 점수와 등급을 반환 getScore, getGrade
-        public int getScore() { return score; }
-        public String getGrade() { return grade; }
+        public int getScore() {
+            return score;
+        }
+
+        public String getGrade() {
+            return grade;
+        }
     }
 
     // 특정 학생의 특정 과목에 대해 특정 회차의 점수를 추가하는 역할
@@ -143,27 +146,6 @@ public class Score {
         }
     }
 
-    // ================ 수강생 삭제로 인한 추가 ================
-
-    public static boolean deleteStudentScores(String studentId) {
-        List<String> keyRemove = new ArrayList<>();
-
-        // scoreMap에서 studentId가 포함된 키를 모두 찾는다.
-        for (String key : scoreMap.keySet()) {
-
-            // studentId + "-" 하는 이유 : 현재 scoreMap 의 형태는,
-            if (key.startsWith(studentId + "-")) {
-                keyRemove.add(key);
-            }
-        }
-        // 찾아낸 키를 scoreMap에서 삭제한다.
-        for (String key : keyRemove) {
-            scoreMap.remove(key);
-        }
-        return !keyRemove.isEmpty(); // 삭제한 키가 있으면 true, 없으면 false
-    }
-    // ================ 수강생 삭제로 인한 추가 ================
-
     // 점수 수정 기능
     public static void editScore(String studentId, String subject, int attempt, int score) {
         if (score < 0 || score > 100) {
@@ -220,15 +202,15 @@ public class Score {
         }
 
         System.out.print("수강중인 과목 목록: ");
-        for (int i = 0; i < subjects.size()-1; i++) {
+        for (int i = 0; i < subjects.size() - 1; i++) {
             System.out.print("[" + (i + 1) + ". " + subjects.get(i) + "], ");
         }
-        System.out.println("[" + (subjects.size()) + ". " + subjects.get(subjects.size()-1) + "]");
+        System.out.println("[" + (subjects.size()) + ". " + subjects.get(subjects.size() - 1) + "]");
 
         int subjectSize = 0;
         String subjectToEdit;
 
-        while(true) {
+        while (true) {
             System.out.print("수정하고 싶은 과목의 번호를 입력하세요: ");
             int editSubjectsIndex = sc.nextInt();
             // 입력한 번호가 1이상이고 리스트 크기 이하인지 확인
@@ -245,7 +227,7 @@ public class Score {
 
         int attempt = -1;
 
-        if(scoreMap.containsKey(key)) {
+        if (scoreMap.containsKey(key)) {
             while (true) { // 회차 입력이 유효할 때까지 반복
                 System.out.print("회차를 입력하세요 (1~10): ");
                 attempt = sc.nextInt();
@@ -265,8 +247,7 @@ public class Score {
                     }
                 }
             }
-        }
-        else{
+        } else {
             System.out.println("등록되지 않은 과목입니다.");
         }
 
@@ -285,6 +266,26 @@ public class Score {
             }
         }
     }
+    // ================ 수강생 삭제로 인한 추가 ================
+
+    public static boolean deleteStudentScores(String studentId) {
+        List<String> keyRemove = new ArrayList<>();
+
+        // scoreMap에서 studentId가 포함된 키를 모두 찾는다.
+        for (String key : scoreMap.keySet()) {
+
+            // studentId + "-" 하는 이유 : 현재 scoreMap 의 형태는,
+            if (key.startsWith(studentId + "-")) {
+                keyRemove.add(key);
+            }
+        }
+        // 찾아낸 키를 scoreMap에서 삭제한다.
+        for (String key : keyRemove) {
+            scoreMap.remove(key);
+        }
+        return !keyRemove.isEmpty(); // 삭제한 키가 있으면 true, 없으면 false
+    }
+    // ================ 수강생 삭제로 인한 추가 ================
 
     // 점수에 따른 등급을 계산
     public static String calculateGrade(String subject, int score) {
@@ -432,22 +433,72 @@ public class Score {
             if (subject.equals(subjectToSearch)) {
                 Map<Integer, ScoreEntry> scores = scoreMap.get(key);
                 found = true; // 조회된 결과가 있다고 표시
-                System.out.println("학생 번호: " + studentId + ", 과목: " + subject);
 
-                for (int attempt : scores.keySet()) {
-                    ScoreEntry scoreEntry = scores.get(attempt);
-                    System.out.println("회차: " + attempt + "회차 | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
+                System.out.println("학생 번호: " + studentId + ", 과목: " + subject);
+                System.out.println("1.특정 과목의 회차별 등급 조회");
+                System.out.println("2.특정 과목의 평균 등급 조회");
+
+                try {
+                    int Subjectchoice = sc.nextInt();
+
+                    switch (Subjectchoice) {
+                        case 1:       // 입력한 과목에 대한 회차별 등급을 조회
+                            for (int attempt : scores.keySet()) {
+                                ScoreEntry scoreEntry = scores.get(attempt);
+                                System.out.println("회차: " + attempt + "회차 | 점수: " + scoreEntry.getScore() + " | 등급: " + scoreEntry.getGrade());
+                                System.out.println(); // 과목별 회차 구분을 위해 빈 줄 추가
+                            }
+                            break;
+                        case 2: // 입력한 과목에 대한 등급 평균 조회
+                            int totalScore = 0;
+                            int totalAttempts = scores.size(); // 과목의 총 회차 수
+                            for (ScoreEntry scoreEntry : scores.values()) {
+                                totalScore += scoreEntry.getScore();
+                            } //모든 회차를 점수 누적 -> totalScore 할당
+
+                            if (totalAttempts > 0) {
+                                double averageScore = (double) totalScore / totalAttempts;
+                                //총점수/회차
+                                String averageGrade = calculateGrade(subjectToSearch, (int) Math.round(averageScore));
+                                //선택과목, (int 형변환)평균점수 -> calculateGrade로 전달
+                                System.out.println("과목의 평균 등급: " + averageGrade);
+                            } else {
+                                System.out.println("해당 과목에 대한 등급 정보가 없습니다.");
+                            }
+                            break;
+                        default:
+                            System.out.println("잘못된 입력입니다.");
+                    }
+
+                } catch (InputMismatchException e) {
+                    System.out.println("잘못된 입력입니다. 숫자를 입력해 주세요.");
+                    sc.nextLine(); // 잘못된 입력을 버퍼에서 제거
                 }
-                System.out.println(); // 과목별 회차 구분을 위해 빈 줄 추가
             }
         }
-
-        // 조회된 결과가 없는 경우 메시지 출력
+        //과목 조회 결과가 없을 경우 메세지
         if (!found) {
             System.out.println("해당 과목에 대한 등급 정보가 없습니다.");
         }
     }
 
+    public static void listAllScoreByCondition(){
+        Student studentChackMap = new Student();
+        Map<String, Map<String, Student.Condition>> map = studentChackMap.getStudentMap();
+        System.out.print("수강생 ID를 입력하세요: ");
+        String studentId = sc.next();
+
+//        if (map.containsKey(studentId)) {
+//            System.out.println( "정상작동");
+//            switch ()
+//            case1: break;
+//            case2:
+//
+//        }
+//        else {
+//            System.out.println("해당 ID는 등록되지 않았습니다.");
+//        }
+    }
 
     // 점수 관리 메뉴
     public static void displayScoreView() throws InterruptedException {
@@ -455,18 +506,15 @@ public class Score {
         while (running) {
             System.out.print("점수 관리를 실행하시겠습니까? (YES/NO): ");
             String answer = sc.next();
-
             if ("no".equalsIgnoreCase(answer)) {
                 break;
             }
 
             System.out.println("==================================");
             System.out.println("점수 관리 실행 중...");
-            System.out.println("1. 시험 회차 별 점수 등록");
-            System.out.println("2. 과목별 회차 점수 수정");
-            System.out.println("3. 전체 회차별 점수 및 등급 조회");
-            System.out.println("4. 특정 과목 회차별 등급을 조회");
-            System.out.println("5. 메인 화면 이동");
+            System.out.println("1. 점수 등록");
+            System.out.println("2. 점수 수정");
+            System.out.println("3. 이전으로 돌아가기");
             System.out.print("관리 항목을 선택하세요: ");
 
             try {
@@ -480,12 +528,6 @@ public class Score {
                         editScoresForSubject(); // 회차별 점수 수정
                         break;
                     case 3:
-                        listAllScores(); // 전체 회차별 점수 및 등급 조회
-                        break;
-                    case 4:
-                        listAllScoresBySubject();
-                        break;
-                    case 5:
                         running = false; // 메인 화면 이동
                         break;
                     default:
