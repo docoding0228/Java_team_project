@@ -94,7 +94,11 @@ public class Score {
     // 모든 수강 과목에 점수 추가
     private static void add_Subjects_Score() {
         System.out.print("수강생 ID를 입력하세요: ");
+        System.out.println("(점수 관리로 돌아가려면 'exit' 을 입력하세요)");
         String studentId = sc.next();
+        if(studentId.equalsIgnoreCase("exit") ){
+            return;
+        }
 
         List<String> subjects = Subject.getStudentSubjects(studentId);
 
@@ -104,15 +108,18 @@ public class Score {
         }
 
         System.out.println("수강 과목 목록: " + subjects);
-        int attempt = -1;
+        int attempt;
 
         while (true) { // 회차 입력이 유효할 때까지 반복
             System.out.print("회차를 입력하세요 (1~10): ");
+            System.out.println("(점수 관리로 돌아가려면 '-1'을 입력하세요)");
             attempt = sc.nextInt();
 
-            if (attempt < 1 || attempt > 10) {
+            if (attempt == -1){
+                return;
+            }else if (attempt < 1 || attempt > 10) {
                 System.out.println("회차는 1~10 사이여야 합니다. 다시 입력하세요.");
-            } else {
+            }else {
                 boolean attemptcheck = false;
 
                 for (String subject : subjects) {
@@ -133,10 +140,13 @@ public class Score {
         for (String subject : subjects) {
             while (true) { // 점수가 유효할 때까지 반복
                 String category = getCategory(subject);
-                System.out.print(category + " " + subject + "에 대한 점수를 입력하세요 (0~100): ");
+                System.out.println(category + " " + subject + "에 대한 점수를 입력하세요 (0~100): ");
+                System.out.println("(점수 관리로 돌아가려면 '-1'을 입력하세요)");
                 int score = sc.nextInt();
 
-                if (score < 0 || score > 100) {
+                if(score == -1){
+                    return;
+                }else if (score < 0 || score > 100) {
                     System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다. 다시 입력하세요.");
                 } else {
                     addScore(studentId, subject, attempt, score);
@@ -193,7 +203,11 @@ public class Score {
     // 모든 수강 과목에 점수 추가
     private static void editScoresForSubject() {
         System.out.print("수강생 ID를 입력하세요: ");
+        System.out.println("(점수 관리로 돌아가려면 'exit' 을 입력하세요)");
         String studentId = sc.next();
+        if(studentId.equalsIgnoreCase("exit") ){
+            return;
+        }
 
         List<String> subjects = Subject.getStudentSubjects(studentId);
 
@@ -213,13 +227,17 @@ public class Score {
 
         while (true) {
             System.out.print("수정하고 싶은 과목의 번호를 입력하세요: ");
+            System.out.println("(점수 관리로 돌아가려면 '-1'을 입력하세요)");
             int editSubjectsIndex = sc.nextInt();
             // 입력한 번호가 1이상이고 리스트 크기 이하인지 확인
             if (editSubjectsIndex >= 1 && editSubjectsIndex <= subjects.size()) {
                 //번호에 따른 과목을 가져옴
                 subjectToEdit = subjects.get(editSubjectsIndex - 1);
                 break;
-            }// 번호가 맞는 번호인지 확인 아니라면 목록에 추가
+            }else if(editSubjectsIndex == -1){
+                return;
+            }
+            // 번호가 맞는 번호인지 확인 아니라면 목록에 추가
             else {
                 System.out.println("올바른 번호를 입력하세요.");
             }
@@ -231,9 +249,12 @@ public class Score {
         if (scoreMap.containsKey(key)) {
             while (true) { // 회차 입력이 유효할 때까지 반복
                 System.out.print("회차를 입력하세요 (1~10): ");
+                System.out.println("(점수 관리로 돌아가려면 '-1'을 입력하세요)");
                 attempt = sc.nextInt();
 
-                if (attempt < 1 || attempt > 10) {
+                if(attempt == -1){
+                    return;
+                }else if (attempt < 1 || attempt > 10) {
                     System.out.println("회차는 1~10 사이여야 합니다. 다시 입력하세요.");
                 } else {
                     boolean attemptcheck = false;
@@ -255,10 +276,13 @@ public class Score {
         // 유효한 회차 입력 후 점수 추가
         while (true) { // 점수가 유효할 때까지 반복
             String category = getCategory(subjectToEdit);
-            System.out.print(category + " " + subjectToEdit + "에 대한 점수를 입력하세요 (0~100): ");
+            System.out.println(category + " " + subjectToEdit + "에 대한 점수를 입력하세요 (0~100): ");
+            System.out.println("(점수 관리로 돌아가려면 '-1'을 입력하세요)");
             int score = sc.nextInt();
 
-            if (score < 0 || score > 100) {
+            if(score == -1){
+                return;
+            }else if (score < 0 || score > 100) {
                 System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다. 다시 입력하세요.");
             } else {
                 editScore(studentId, subjectToEdit, attempt, score);
@@ -421,7 +445,11 @@ public class Score {
         System.out.println("등록된 수강 과목 목록: " + allSubjects);
         // 조회할 과목을 입력받음
         System.out.print("조회할 과목을 입력하세요: ");
+        System.out.println("(점수 관리로 돌아가려면 'exit' 을 입력하세요)");
         String subjectToSearch = sc.next();
+        if(subjectToSearch.equalsIgnoreCase("exit") ){
+            return;
+        }
 
         boolean found = false; // 조회된 결과가 있는지 확인하기 위한 변수
 
@@ -512,11 +540,11 @@ public class Score {
     public static void displayScoreView() throws InterruptedException {
         boolean running = true;
         while (running) {
-            System.out.print("점수 관리를 실행하시겠습니까? (YES/NO): ");
-            String answer = sc.next();
-            if ("no".equalsIgnoreCase(answer)) {
-                break;
-            }
+//            System.out.print("점수 관리를 실행하시겠습니까? (YES/NO): ");
+//            String answer = sc.next();
+//            if ("no".equalsIgnoreCase(answer)) {
+//                break;
+//            }
 
             System.out.println("==================================");
             System.out.println("점수 관리 실행 중...");
@@ -536,7 +564,7 @@ public class Score {
                         add_Subjects_Score(); // 모든 수강 과목에 점수 추가
                         break;
                     case 2:
-                        //editScoresForSubject(); // 회차별 점수 수정
+                        editScoresForSubject(); // 회차별 점수 수정
                         break;
                     case 3:
                         listAllScores(); // 전체 회차별 점수 및 등급 조회
