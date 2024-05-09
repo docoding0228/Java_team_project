@@ -1,5 +1,6 @@
 package mypk;
 import java.util.Scanner;
+import java.util.List;
 
 public class Main {
     private static Scanner sc = new Scanner(System.in);
@@ -21,7 +22,12 @@ public class Main {
             int choice = sc.nextInt();
 
             switch (choice) {
-                case 1 -> Student.displayStudentView(); // 수강생 관리
+                    case 1 -> {
+                        // 필수 및 선택 과목 정보를 가져옴
+                        List<String> subjectlist = Subject.getAllSubjects(); // 전체 과목 리스트도 가져옴
+                        // displayStudentView 메서드에 필수 및 선택 과목 정보 전달
+                        Student.displayStudentView(subjectlist);
+                    }
                 case 2 -> Score.displayScoreView();
                 case 3 -> running = false; // 점수 관리
                 default -> {
