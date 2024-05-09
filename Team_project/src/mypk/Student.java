@@ -1,8 +1,10 @@
 package mypk;
 import java.util.*;
 
+
+
 public static class Student {
-    static Scanner sc = new Scanner(System.in);
+    private static Scanner sc = new Scanner(System.in);
 
     // 수강생 ID와 이름을 저장하는 Map
     public static Map<String, Map<String,Condition>> studentMap = new HashMap<>();
@@ -69,7 +71,7 @@ public static class Student {
         }
     }
 
-    public static void listStudents(List<String> subjectlist) {
+    public static void listStudents() {
         if (studentMap.isEmpty()) {
             System.out.println("등록된 수강생이 없습니다.");
         } else {
