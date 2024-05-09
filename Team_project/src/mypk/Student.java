@@ -161,8 +161,6 @@ public class Student {
     // ================ 수강생 삭제로 인한 추가 ================
 
     public static void displayStudentView() throws InterruptedException {
-        boolean running = true;
-        while (running) {
             System.out.println("==================================");
             System.out.println("수강생 관리 실행 중...");
             System.out.println("1. 수강생 등록");
@@ -176,17 +174,13 @@ public class Student {
 
             switch (choice) {
                 case 1 -> Student.registerStudent(); // 수강생 등록
-                case 2 -> Student.editStudent(); // 수강생 수정 및 삭제
-                case 3 -> Subject.manageSubjects(); // 수강생 과목 추가
-                case 4 -> Subject.subjectEdit();  // 수강생 과목 수정
-                case 5 -> running = false;// 수강생 통합 조회
-                default -> {
-                    System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
-                    running = false;
-                }
+                case 2 -> Student.editStudent();
+                case 3 -> Subject.manageSubjects();
+                case 4 -> Subject.subjectEdit();
+                case 5 -> System.out.println(" 이전화면으로 돌아갑니다." );
+                default -> System.out.println("잘못된 입력입니다. 메인 화면으로 돌아갑니다.");
             }
         }
-    }
 
     public static boolean isRegistered(String studentId) {
         return studentMap.containsKey(studentId); // 등록 여부 확인
