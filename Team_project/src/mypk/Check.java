@@ -2,8 +2,14 @@ package mypk;
 
 import java.util.Scanner;
 
+
 public class Check {
     private static Scanner sc = new Scanner(System.in);
+
+    /**
+     * 선택지에 따른 필요한 메서드를 불러온다.
+     * @throws InterruptedException 예외 발생시 메인 화면으로 이동
+     */
     public static void Check() throws InterruptedException {
             System.out.println("==================================");
             System.out.println("수강생 정보 조회 중...");

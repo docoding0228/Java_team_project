@@ -8,6 +8,10 @@ public class Main {
         displayMainView();
     }
 
+    /**
+     * 메인화면이며 선택지에 따라 필요한 메서드를 불러온다.
+     * @throws InterruptedException 예외 발생시 메인 화면으로 이동
+     */
     public static void displayMainView() throws InterruptedException {
         boolean running = true;
         while (running) {

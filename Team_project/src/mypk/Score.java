@@ -4,22 +4,43 @@ import java.util.*;
 import static mypk.Student.pushID;
 
 public class Score {
+    /**
+     * 스코어를 위한 이너클래스로 점수에 따른 letter grade(A,B,C...) 를 저장하기 위해 사용된다.
+     */
     public static class ScoreEntry {
         private final int score;
         private final String grade;
 
+        /**
+         *
+         * @param score 점수 값을 입력한대로 학생의 점수에 저장된다.
+         * @param grade Letter grade 를 입력한대로 학생의 Letter grade 로 저장된다.
+         */
         public ScoreEntry(int score, String grade) {
             this.score = score;
             this.grade = grade;
         }
 
+        /**
+         *
+         * @return 학생의 점수를 리턴해준다
+         */
         public int getScore() { return score; }
+
+        /**
+         *
+         * @return 학생의 letter grade 를 리턴해준다.
+         */
         public String getGrade() { return grade; }
     }
 
     private static final Scanner sc = new Scanner(System.in);
     private static final Map<String, Map<Integer, ScoreEntry>> scoreMap = new HashMap<>();
 
+    /**
+     * 점수관리 창으로써 선택지에 따라 필요한 메서드를 불러온다.
+     * @throws InterruptedException 숫자가 아닌 다른것을 입력했을때 발생하는 오류를 처리하기 위해 사용된다.
+     */
     public static void displayScoreView() throws InterruptedException {
 
             System.out.println("==================================");
@@ -56,6 +77,9 @@ public class Score {
 
     }
 
+    /**
+     * 점수 조회 관련 선택 창으로 선택지에 따른 필요한 메서드를 불러온다.
+     */
     public static void displayScoreSelect(){
 
             System.out.println("==================================");
@@ -74,8 +98,13 @@ public class Score {
 
     }
 
-    // 특정 학생의 특정 과목에 대해 특정 회차의 점수를 추가하는 역할
-    // studentId : 학생의 고유 ID, subject : 학생이 수강하는 과목, attempt : 회차 score : 점수
+    /**
+     * 학생의 특정 회차에 점수를 저장하기 위한 메서드이다.
+     * @param studentId studentId 를 받아와서 studentMap 에서 특정 학생으로 접근하기 위한 key 로 사용된다.
+     * @param subject scoreMap 에서 특정 과목을 저장하기 위한 key 를 만들기 위해 사용된다. "studentId + "-" + subject"
+     * @param attempt 시험회차를 지정하는데 사용된다.
+     * @param score 실질적인 점수값을 저장하는데 사용된다.
+     */
     public static void addScore(String studentId, String subject, int attempt, int score) {
         if (score < 0 || score > 100) {
             System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다.");
@@ -94,6 +123,11 @@ public class Score {
         scoreMap.get(key).put(attempt, new ScoreEntry(score, grade));
     }
 
+    /**
+     *
+     * @param subject 해당 과목이 필수인지 선택인지 확인되는 값이다.
+     * @return 해당 과목이 필수과목인지 선택과목인지 String 값으로 리턴한다.
+     */
     private static String getCategory(String subject) {
         List<String> requiredSubjects = Subject.getRequiredSubjects();
         List<String> electiveSubjects = Subject.getElectiveSubjects();
@@ -107,6 +141,9 @@ public class Score {
         }
     }
 
+    /**
+     * 선택한 회차에 모든 과목들에 점수를 등록하는 기능이다.
+     */
     private static void add_Subjects_Score() {
         System.out.print("수강생 ID를 입력하세요: ");
         String studentId = sc.next();
@@ -161,6 +198,11 @@ public class Score {
         }
     }
 
+    /**
+     * 점수 삭제 기능
+     * @param studentId studentId 를 key 값으로 사용하여 특정 학생을 불러오기 위해 사용된다.
+     * @return 삭제가 되었는지 확인하기 위한 boolean 값이 리턴된다.
+     */
     public static boolean deleteStudentScores(String studentId) {
         List<String> keyRemove = new ArrayList<>();
         for (String key : scoreMap.keySet()) {
@@ -174,6 +216,13 @@ public class Score {
         return !keyRemove.isEmpty();
     }
 
+    /**
+     * 특정 점수를 수정하는 기능이다.
+     * @param studentId 특정 학생을 불러오기 위해 필요한 key 값으로 사용된다.
+     * @param subject 특정 과목을 불러오기 위한 key 를 만드는데 사용된다. "key = studentId + "-" + subject"
+     * @param attempt 수정하려는 회차를 고르기 위해 사용된다.
+     * @param score 새롭게 입력하려는 점수이다.
+     */
     public static void editScore(String studentId, String subject, int attempt, int score) {
         if (score < 0 || score > 100) {
             System.out.println("음수이거나 100점이 넘는 점수는 입력받을 수 없습니다.");
@@ -198,6 +247,9 @@ public class Score {
         scoreMap.get(key).put(attempt, new ScoreEntry(score, grade));
     }
 
+    /**
+     * 점수 수정을 위한 메서드로 내부에서 editScore() 메서드를 호출하여 점수를 수정한다.
+     */
     private static void editScoresForSubject() {
         String studentId = pushID();
 
@@ -268,6 +320,12 @@ public class Score {
         }
     }
 
+    /**
+     * 점수에 따른 Letter grade 를 계산하는 메서드이다.
+     * @param subject 과목이 필수인지 선택인지 분리하기 위해 사용된다.
+     * @param score 점수를 입력받아 letter grade 로 변환한다.
+     * @return 점수에 따른 letter grade 값을 반환한다.
+     */
     public static String calculateGrade(String subject, int score) {
         String category = getCategory(subject);
 
@@ -302,6 +360,9 @@ public class Score {
         }
     }
 
+    /**
+     * 등록된 모든 점수를 출력하는 메서드이다.
+     */
     public static void listAllScores() {
         Map<String, Map<Integer, Map<String, ScoreEntry>>> groupedScores = new HashMap<>();
         for (String key : scoreMap.keySet()) {
@@ -357,6 +418,9 @@ public class Score {
         }
     }
 
+    /**
+     * 특정 과목의 평균 등급 및 특정 과목의 회차별 점수를 조회하기 위해 사용된다.
+     */
     public static void listAllScoresBySubject() {
         String inputId = pushID();
         List<String> allSubjects = Subject.getStudentSubjects(inputId);
